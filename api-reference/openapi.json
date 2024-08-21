@@ -1,54 +1,57 @@
 {
-  "openapi": "3.0.1",
+  "openapi": "3.0.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
+    "version": "1.0.0",
+    "title": "Swagger Petstore",
     "license": {
       "name": "MIT"
-    },
-    "version": "1.0.0"
+    }
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
+      "url": "http://petstore.swagger.io/v1"
     }
   ],
   "paths": {
-    "/plants": {
+    "/pets": {
       "get": {
-        "description": "Returns all plants from the system that the user has access to",
+        "summary": "List all pets",
+        "operationId": "listPets",
+        "tags": ["pets"],
         "parameters": [
           {
             "name": "limit",
             "in": "query",
-            "description": "The maximum number of results to return",
+            "description": "How many items to return at one time (max 100)",
+            "required": false,
             "schema": {
               "type": "integer",
+              "maximum": 100,
               "format": "int32"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "A paged array of pets",
+            "headers": {
+              "x-next": {
+                "description": "A link to the next page of responses",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
-                  }
+                  "$ref": "#/components/schemas/Pets"
                 }
               }
             }
           },
-          "400": {
-            "description": "Unexpected error",
+          "default": {
+            "description": "unexpected error",
             "content": {
               "application/json": {
                 "schema": {
@@ -57,33 +60,41 @@
               }
             }
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "python",
+            "source": "from test_sdk import TestSdk, Environment\n\nsdk = TestSdk(\n    access_token=\"YOUR_ACCESS_TOKEN\",\n    base_url=Environment.DEFAULT.value,\n    timeout=10000\n)\n\nresult = sdk.pets.list_pets(limit=98)\n\nprint(result)"
+          },
+          {
+            "lang": "csharp",
+            "source": "using TestSdk;\n\nvar client = new TestSdkClient();\n\nvar response = await client.Pets.ListPetsAsync(2);\n\nConsole.WriteLine(response);"
+          },
+          {
+            "lang": "go",
+            "source": "import (\n  \"fmt\"\n  \"encoding/json\"\n  \"github.com/swagger-api/swagger-petstore/pkg/testsdkconfig\"\n  \"github.com/swagger-api/swagger-petstore/pkg/testsdk\"\n  \"github.com/swagger-api/swagger-petstore/pkg/pets\"\n)\n\nconfig := testsdkconfig.NewConfig()\nclient := testsdk.NewTestSdk(config)\n\n\nparams := pets.ListPetsRequestParams{}\n\n\nresponse, err := client.Pets.ListPets(context.Background(), params)\nif err != nil {\n  panic(err)\n}\n\nfmt.Print(response)"
+          }
+        ]
       },
       "post": {
-        "description": "Creates a new plant in the store",
+        "summary": "Create a pet",
+        "operationId": "createPets",
+        "tags": ["pets"],
         "requestBody": {
-          "description": "Plant to add to the store",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+                "$ref": "#/components/schemas/Pet"
               }
             }
           },
           "required": true
         },
         "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
-                }
-              }
-            }
+          "201": {
+            "description": "Null response"
           },
-          "400": {
+          "default": {
             "description": "unexpected error",
             "content": {
               "application/json": {
@@ -93,30 +104,51 @@
               }
             }
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "python",
+            "source": "from test_sdk import TestSdk, Environment\nfrom test_sdk.models import Pet\n\nsdk = TestSdk(\n    access_token=\"YOUR_ACCESS_TOKEN\",\n    base_url=Environment.DEFAULT.value,\n    timeout=10000\n)\n\nrequest_body = Pet(\n    id_=6,\n    name=\"name\",\n    tag=\"tag\"\n)\n\nresult = sdk.pets.create_pets(request_body=request_body)\n\nprint(result)"
+          },
+          {
+            "lang": "csharp",
+            "source": "using TestSdk;\nusing TestSdk.Models;\n\nvar client = new TestSdkClient();\n\nvar input = new Pet(10, \"name\");\n\nawait client.Pets.CreatePetsAsync(input);"
+          },
+          {
+            "lang": "go",
+            "source": "import (\n  \"fmt\"\n  \"encoding/json\"\n  \"github.com/swagger-api/swagger-petstore/pkg/testsdkconfig\"\n  \"github.com/swagger-api/swagger-petstore/pkg/testsdk\"\n  \"github.com/swagger-api/swagger-petstore/pkg/pets\"\n)\n\nconfig := testsdkconfig.NewConfig()\nclient := testsdk.NewTestSdk(config)\n\n\nrequest := pets.Pet{}\nrequest.SetId(int64(123))\nrequest.SetName(\"Name\")\n\nresponse, err := client.Pets.CreatePets(context.Background(), request)\nif err != nil {\n  panic(err)\n}\n\nfmt.Print(response)"
+          }
+        ]
       }
     },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
+    "/pets/{petId}": {
+      "get": {
+        "summary": "Info for a specific pet",
+        "operationId": "showPetById",
+        "tags": ["pets"],
         "parameters": [
           {
-            "name": "id",
+            "name": "petId",
             "in": "path",
-            "description": "ID of plant to delete",
             "required": true,
+            "description": "The id of the pet to retrieve",
             "schema": {
-              "type": "integer",
-              "format": "int64"
+              "type": "string"
             }
           }
         ],
         "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
+          "200": {
+            "description": "Expected response to a valid request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pet"
+                }
+              }
+            }
           },
-          "400": {
+          "default": {
             "description": "unexpected error",
             "content": {
               "application/json": {
@@ -126,56 +158,54 @@
               }
             }
           }
-        }
+        },
+        "x-codeSamples": [
+          {
+            "lang": "python",
+            "source": "from test_sdk import TestSdk, Environment\n\nsdk = TestSdk(\n    access_token=\"YOUR_ACCESS_TOKEN\",\n    base_url=Environment.DEFAULT.value,\n    timeout=10000\n)\n\nresult = sdk.pets.show_pet_by_id(pet_id=\"petId\")\n\nprint(result)"
+          },
+          {
+            "lang": "csharp",
+            "source": "using TestSdk;\n\nvar client = new TestSdkClient();\n\nvar response = await client.Pets.ShowPetByIdAsync(\"petId\");\n\nConsole.WriteLine(response);"
+          },
+          {
+            "lang": "go",
+            "source": "import (\n  \"fmt\"\n  \"encoding/json\"\n  \"github.com/swagger-api/swagger-petstore/pkg/testsdkconfig\"\n  \"github.com/swagger-api/swagger-petstore/pkg/testsdk\"\n)\n\nconfig := testsdkconfig.NewConfig()\nclient := testsdk.NewTestSdk(config)\n\nresponse, err := client.Pets.ShowPetById(context.Background(), \"petId\")\nif err != nil {\n  panic(err)\n}\n\nfmt.Print(response)"
+          }
+        ]
       }
     }
   },
   "components": {
     "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
+      "Pet": {
         "type": "object",
+        "required": ["id", "name"],
         "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
           "name": {
-            "description": "The name of the plant",
             "type": "string"
           },
           "tag": {
-            "description": "Tag to specify the type",
             "type": "string"
           }
         }
       },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
+      "Pets": {
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "$ref": "#/components/schemas/Pet"
+        }
       },
       "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
         "type": "object",
+        "required": ["code", "message"],
         "properties": {
-          "error": {
+          "code": {
             "type": "integer",
             "format": "int32"
           },
@@ -183,12 +213,6 @@
             "type": "string"
           }
         }
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
       }
     }
   }
