@@ -1,0 +1,10 @@
+{
+  "description": "Contains information about device connectivity",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "../schemas/DeviceDetails.json"
+      }
+    }
+  }
+}

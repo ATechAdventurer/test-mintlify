@@ -1,0 +1,15 @@
+{
+  "description": "Session not found",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "../schemas/ErrorInfo.json"
+      },
+      "example": {
+        "reasonCode": "ERR-1004",
+        "systemMessage": "NOT_FOUND",
+        "userMessage": "Session Id does not exist"
+      }
+    }
+  }
+}

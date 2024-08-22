@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "minProperties": 1,
+  "properties": {
+    "ipv4addr": {
+      "$ref": "./Ipv4Addr.json"
+    },
+    "ipv6addr": {
+      "$ref": "./Ipv6Addr.json"
+    }
+  },
+  "description": "Application server identifier"
+}

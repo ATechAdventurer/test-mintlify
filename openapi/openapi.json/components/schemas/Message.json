@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "properties": {
+    "severity": {
+      "type": "string",
+      "enum": [
+        "INFO",
+        "WARNING"
+      ],
+      "description": "Message severity"
+    },
+    "description": {
+      "type": "string",
+      "description": "Detailed message text"
+    }
+  },
+  "required": [
+    "severity",
+    "description"
+  ]
+}

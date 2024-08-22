@@ -1,0 +1,45 @@
+{
+  "type": "object",
+  "minProperties": 1,
+  "properties": {
+    "ranges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "from",
+          "to"
+        ],
+        "properties": {
+          "from": {
+            "$ref": "./Port.json"
+          },
+          "to": {
+            "$ref": "./Port.json"
+          }
+        }
+      }
+    },
+    "ports": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "./Port.json"
+      }
+    }
+  },
+  "example": {
+    "ranges": [
+      {
+        "from": 5010,
+        "to": 5020
+      }
+    ],
+    "ports": [
+      5060,
+      5070
+    ]
+  },
+  "description": "Ports may be specified as a list of ranges or single ports.\n"
+}

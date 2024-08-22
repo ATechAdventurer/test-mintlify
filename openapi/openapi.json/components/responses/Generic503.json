@@ -1,0 +1,15 @@
+{
+  "description": "Service unavailable",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "../schemas/ErrorInfo.json"
+      },
+      "example": {
+        "reasonCode": "ERR-5003",
+        "systemMessage": "SERVICE_UNAVAILABLE",
+        "userMessage": "Service unavailable"
+      }
+    }
+  }
+}

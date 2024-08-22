@@ -1,0 +1,10 @@
+{
+  "description": "The details of the device location request",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "../schemas/DeviceLocationRequest.json"
+      }
+    }
+  }
+}
