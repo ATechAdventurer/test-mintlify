@@ -1,0 +1,59 @@
+{
+  "description": "The details of the device location",
+  "type": "object",
+  "properties": {
+    "iccid": {
+      "$ref": "./Iccid.json"
+    },
+    "msisdn": {
+      "type": "string",
+      "example": "17197158760"
+    },
+    "distanceUnit": {
+      "type": "string",
+      "enum": [
+        "meter"
+      ],
+      "example": "meter",
+      "description": "The unit of distance."
+    },
+    "longitude": {
+      "type": "number",
+      "example": -104.866133,
+      "description": "The longitude of the device.",
+      "minimum": -180,
+      "maximum": 180
+    },
+    "latitude": {
+      "type": "number",
+      "example": 39.122819,
+      "description": "The latitude of the device.",
+      "minimum": -90,
+      "maximum": 90
+    },
+    "shape": {
+      "type": "string",
+      "enum": [
+        "CircularArea"
+      ],
+      "example": "CircularArea",
+      "description": "The shape of the area."
+    },
+    "radius": {
+      "type": "number",
+      "example": 468,
+      "description": "The radius of the area.",
+      "minimum": 0
+    },
+    "cellid": {
+      "type": "string",
+      "example": "6490371",
+      "description": "The cell ID of the device."
+    },
+    "timestamp": {
+      "type": "string",
+      "example": "20220324202805",
+      "description": "The timestamp of the location."
+    }
+  }
+}

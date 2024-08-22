@@ -1,0 +1,15 @@
+{
+  "description": "Invalid input",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "../schemas/ErrorInfo.json"
+      },
+      "example": {
+        "reasonCode": "ERR-4000",
+        "systemMessage": "INVALID_INPUT",
+        "userMessage": "Schema validation failed at  ..."
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "name": "X-transaction-id",
+  "in": "header",
+  "description": "The transaction ID. Represents the API transaction, for use in debugging.",
+  "required": false,
+  "schema": {
+    "type": "string"
+  }
+}

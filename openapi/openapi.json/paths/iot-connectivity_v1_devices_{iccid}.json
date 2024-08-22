@@ -1,0 +1,56 @@
+{
+  "get": {
+    "tags": [
+      "Connectivity"
+    ],
+    "x-codeSamples": [
+      {
+        "lang": "typescript",
+        "source": {
+          "$ref": "../code_samples/typescript/iot-connectivity_v1_devices_{iccid}/get.ts"
+        }
+      },
+      {
+        "lang": "python",
+        "source": {
+          "$ref": "../code_samples/python/iot-connectivity_v1_devices_{iccid}/get.py"
+        }
+      }
+    ],
+    "summary": "Returns detailed connectivity information about a specified SIM card.",
+    "description": "Returns detailed connectivity information about a specified SIM card.",
+    "operationId": "GetDeviceDetails",
+    "parameters": [
+      {
+        "name": "iccid",
+        "in": "path",
+        "description": "The SIM card's ICCID.",
+        "required": true,
+        "schema": {
+          "type": "string"
+        },
+        "example": "8901882024109918312"
+      },
+      {
+        "$ref": "../components/parameters/TransactionId.json"
+      }
+    ],
+    "responses": {
+      "200": {
+        "$ref": "../components/responses/DeviceDetailsResponse.json"
+      },
+      "400": {
+        "$ref": "../components/responses/GenericError.json"
+      },
+      "404": {
+        "$ref": "../components/responses/GenericError.json"
+      },
+      "500": {
+        "$ref": "../components/responses/GenericError.json"
+      },
+      "503": {
+        "$ref": "../components/responses/GenericError.json"
+      }
+    }
+  }
+}

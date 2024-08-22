@@ -1,0 +1,46 @@
+{
+  "description": "Data type with attributes required for creating a session",
+  "type": "object",
+  "properties": {
+    "duration": {
+      "type": "integer",
+      "example": 86400,
+      "description": "Session duration in seconds. Maximal value of 24 hours is used if not set.\nAfter session has expired the client will receive SESSION_TERMINATED event. See notification callback.\n",
+      "format": "int32",
+      "minimum": 1,
+      "maximum": 86400,
+      "default": 86400
+    },
+    "ueId": {
+      "$ref": "./UeId.json"
+    },
+    "asId": {
+      "$ref": "./AsId.json"
+    },
+    "uePorts": {
+      "$ref": "./PortsSpec.json"
+    },
+    "asPorts": {
+      "$ref": "./PortsSpec.json"
+    },
+    "qos": {
+      "$ref": "./QosProfile.json"
+    },
+    "notificationUrl": {
+      "type": "string",
+      "format": "uri",
+      "example": "https://application-server.com",
+      "description": "Allows asynchronous delivery of session related events"
+    },
+    "notificationAuthToken": {
+      "type": "string",
+      "example": "c8974e592c2fa383d4a3960714",
+      "description": "Authentication token for callback API"
+    }
+  },
+  "required": [
+    "ueId",
+    "asId",
+    "qos"
+  ]
+}

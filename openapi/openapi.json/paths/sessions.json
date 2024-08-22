@@ -1,0 +1,170 @@
+{
+  "post": {
+    "x-codeSamples": [
+      {
+        "lang": "typescript",
+        "source": {
+          "$ref": "../code_samples/typescript/sessions/post.ts"
+        }
+      },
+      {
+        "lang": "python",
+        "source": {
+          "$ref": "../code_samples/python/sessions/post.py"
+        }
+      }
+    ],
+    "tags": [
+      "QoS sessions"
+    ],
+    "summary": "Creates a new session",
+    "description": "Creates a new QoS session on demand",
+    "operationId": "createSession",
+    "parameters": [
+      {
+        "$ref": "../components/parameters/AccessToken.json"
+      },
+      {
+        "$ref": "../components/parameters/PopToken.json"
+      },
+      {
+        "$ref": "../components/parameters/TransactionId.json"
+      }
+    ],
+    "requestBody": {
+      "description": "Creates a new session",
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../components/schemas/CreateSession.json"
+          }
+        }
+      },
+      "required": true
+    },
+    "responses": {
+      "201": {
+        "description": "Session created",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/SessionInfo.json"
+            }
+          }
+        }
+      },
+      "400": {
+        "description": "Invalid input",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/ErrorInfo.json"
+            },
+            "examples": {
+              "Generic400": {
+                "summary": "Schema validation failed",
+                "value": {
+                  "reasonCode": "ERR-4000",
+                  "systemMessage": "Bad Request",
+                  "userMessage": "Schema validation failed at  ..."
+                }
+              },
+              "MsisdnRequired": {
+                "summary": "msisdn is required as part of ueId",
+                "value": {
+                  "reasonCode": "ERR-4000",
+                  "systemMessage": "Bad Request",
+                  "userMessage": "Expected property is missing: ueId.msisdn"
+                }
+              },
+              "IPv4Required": {
+                "summary": "ipv4addr is required as part of ueId",
+                "value": {
+                  "reasonCode": "ERR-4000",
+                  "systemMessage": "Bad Request",
+                  "userMessage": "Expected property is missing: ueId.ipv4addr"
+                }
+              },
+              "IPRequired": {
+                "summary": "Some IP address is required as part of ueId",
+                "value": {
+                  "reasonCode": "ERR-4000",
+                  "systemMessage": "Bad Request",
+                  "userMessage": "Expected property is missing: ueId.ipv4addr or ueId.ipv6addr"
+                }
+              },
+              "UePortsRequired": {
+                "summary": "uePorts is required",
+                "value": {
+                  "reasonCode": "ERR-4000",
+                  "systemMessage": "Bad Request",
+                  "userMessage": "Expected property is missing: uePorts"
+                }
+              },
+              "QoSRequired": {
+                "summary": "qos is required",
+                "value": {
+                  "reasonCode": "ERR-4000",
+                  "systemMessage": "Bad Request",
+                  "userMessage": "Expected property is missing: qos"
+                }
+              },
+              "UePortsRangesNotAllowed": {
+                "summary": "Ranges at uePorts are not allowed",
+                "value": {
+                  "reasonCode": "ERR-4000",
+                  "systemMessage": "Bad Request",
+                  "userMessage": "Ranges not allowed: uePorts"
+                }
+              }
+            }
+          }
+        }
+      },
+      "401": {
+        "$ref": "../components/responses/Generic401.json"
+      },
+      "403": {
+        "$ref": "../components/responses/Generic403.json"
+      },
+      "409": {
+        "description": "Conflict",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/ErrorInfo.json"
+            },
+            "example": {
+              "reasonCode": "ERR-409",
+              "systemMessage": "CONFLICT",
+              "userMessage": "Another session is created for the same UE"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "Server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/ErrorInfo.json"
+            },
+            "example": {
+              "reasonCode": "ERR-5000",
+              "systemMessage": "Internal Server Error",
+              "userMessage": "Sorry, something went wrong. Please try again later."
+            }
+          }
+        }
+      },
+      "503": {
+        "$ref": "../components/responses/Generic503.json"
+      }
+    },
+    "security": [
+      {
+        "oAuth2ClientCredentials": []
+      }
+    ]
+  }
+}

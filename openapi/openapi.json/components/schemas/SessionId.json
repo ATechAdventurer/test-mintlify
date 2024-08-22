@@ -1,0 +1,5 @@
+{
+  "type": "string",
+  "format": "uuid",
+  "description": "Session ID in UUID format"
+}

@@ -1,0 +1,5 @@
+{
+  "description": "The SIM card's ICCID.",
+  "type": "string",
+  "example": "8901882024109918312"
+}

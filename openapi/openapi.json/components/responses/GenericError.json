@@ -1,0 +1,10 @@
+{
+  "description": "Invalid input",
+  "content": {
+    "application/json": {
+      "schema": {
+        "$ref": "../schemas/Error.json"
+      }
+    }
+  }
+}

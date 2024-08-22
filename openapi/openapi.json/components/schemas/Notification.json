@@ -1,0 +1,15 @@
+{
+  "type": "object",
+  "required": [
+    "sessionId",
+    "event"
+  ],
+  "properties": {
+    "sessionId": {
+      "$ref": "./SessionId.json"
+    },
+    "event": {
+      "$ref": "./SessionEvent.json"
+    }
+  }
+}

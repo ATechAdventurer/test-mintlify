@@ -1,0 +1,40 @@
+{
+  "description": "Session related information.",
+  "allOf": [
+    {
+      "$ref": "./CreateSession.json"
+    },
+    {
+      "type": "object",
+      "required": [
+        "id",
+        "duration",
+        "startedAt",
+        "expiresAt"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "./SessionId.json"
+        },
+        "startedAt": {
+          "type": "integer",
+          "example": 1639479600,
+          "description": "Timestamp of session start in seconds since unix epoch",
+          "format": "int64"
+        },
+        "expiresAt": {
+          "type": "integer",
+          "example": 1639566000,
+          "description": "Timestamp of session expiration if the session was not deleted, in seconds since unix epoch",
+          "format": "int64"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "$ref": "./Message.json"
+          }
+        }
+      }
+    }
+  ]
+}

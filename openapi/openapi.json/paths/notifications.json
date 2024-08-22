@@ -1,0 +1,82 @@
+{
+  "post": {
+    "x-codeSamples": [
+      {
+        "lang": "typescript",
+        "source": {
+          "$ref": "../code_samples/typescript/notifications/post.ts"
+        }
+      },
+      {
+        "lang": "python",
+        "source": {
+          "$ref": "../code_samples/python/notifications/post.py"
+        }
+      }
+    ],
+    "tags": [
+      "Session notifications callback"
+    ],
+    "summary": "Session notifications callback",
+    "description": "Important: this endpoint is to be implemented by the API consumer.\nThe QoD server will call this endpoint whenever any network related event occurs.\nCurrently only SESSION_TERMINATED event is implemented. Any other network events are ignored.\n",
+    "operationId": "postNotification",
+    "parameters": [
+      {
+        "$ref": "../components/parameters/AccessToken.json"
+      },
+      {
+        "$ref": "../components/parameters/PopToken.json"
+      },
+      {
+        "$ref": "../components/parameters/TransactionId.json"
+      }
+    ],
+    "requestBody": {
+      "required": true,
+      "content": {
+        "application/json": {
+          "schema": {
+            "$ref": "../components/schemas/Notification.json"
+          }
+        }
+      }
+    },
+    "responses": {
+      "204": {
+        "description": "Successful notification"
+      },
+      "400": {
+        "$ref": "../components/responses/Generic400.json"
+      },
+      "401": {
+        "$ref": "../components/responses/Generic401.json"
+      },
+      "403": {
+        "$ref": "../components/responses/Generic403.json"
+      },
+      "500": {
+        "description": "Server error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "../components/schemas/ErrorInfo.json"
+            },
+            "example": {
+              "reasonCode": "ERR-5000",
+              "systemMessage": "INTERNAL",
+              "userMessage": "Failed to handle notification"
+            }
+          }
+        }
+      },
+      "503": {
+        "$ref": "../components/responses/Generic503.json"
+      }
+    },
+    "security": [
+      {
+        "apiKey": []
+      }
+    ]
+  }
+}
