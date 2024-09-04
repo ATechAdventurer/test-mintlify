@@ -151,30 +151,6 @@ paths:
             var response = await client.Destinations.ListDestinationsAsync();
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-            response, err :=
-            client.Destinations.ListDestinations(context.Background())
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /packages:
     get:
       summary: List Packages
@@ -327,40 +303,10 @@ paths:
             var response = await client.Packages.ListPackagesAsync("FRA",
             "2023-11-01", "2023-11-20",
             "Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA",
-            20, 8, 2, 8.44);
+            20, 3, 9, 7.2);
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/packages"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-
-            params := packages.ListPackagesRequestParams{}
-
-
-
-            response, err := client.Packages.ListPackages(context.Background(),
-            params)
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /purchases:
     post:
       summary: Create Purchase
@@ -531,43 +477,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/purchases"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-
-            request := purchases.CreatePurchaseRequest{}
-
-            request.SetDestination("Destination")
-
-            request.SetDataLimitInGb(float64(123))
-
-            request.SetStartDate("StartDate")
-
-            request.SetEndDate("EndDate")
-
-
-            response, err :=
-            client.Purchases.CreatePurchase(context.Background(), request)
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
     get:
       summary: List Purchases
       description: This endpoint can be used to list all the successful purchases made
@@ -774,40 +683,10 @@ paths:
             client.Purchases.ListPurchasesAsync("1111222233334444555",
             "2023-11-01", "2023-11-20", "abc111222333444",
             "Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA",
-            20, 2.38, 3.34);
+            20, 0.4, 8.94);
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/purchases"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-
-            params := purchases.ListPurchasesRequestParams{}
-
-
-
-            response, err :=
-            client.Purchases.ListPurchases(context.Background(), params)
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /purchases/topup:
     post:
       summary: Top-up eSIM
@@ -970,43 +849,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/purchases"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-
-            request := purchases.TopUpEsimRequest{}
-
-            request.SetIccid("Iccid")
-
-            request.SetDataLimitInGb(float64(123))
-
-            request.SetStartDate("StartDate")
-
-            request.SetEndDate("EndDate")
-
-
-            response, err := client.Purchases.TopUpEsim(context.Background(),
-            request)
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /purchases/edit:
     post:
       summary: Edit Purchase
@@ -1132,41 +974,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/purchases"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-
-            request := purchases.EditPurchaseRequest{}
-
-            request.SetPurchaseId("PurchaseId")
-
-            request.SetStartDate("StartDate")
-
-            request.SetEndDate("EndDate")
-
-
-            response, err := client.Purchases.EditPurchase(context.Background(),
-            request)
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /purchases/{purchaseId}/consumption:
     get:
       summary: Get Purchase Consumption
@@ -1237,31 +1044,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-            response, err :=
-            client.Purchases.GetPurchaseConsumption(context.Background(),
-            "purchaseId")
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /esim:
     get:
       summary: Get eSIM Status
@@ -1345,29 +1127,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: |-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/esim"
-            )
-
-            config := testsdkconfig.NewConfig()
-            client := testsdk.NewTestSdk(config)
-
-
-            params := esim.GetEsimRequestParams{}
-            params.SetIccid("string")
-
-            response, err := client.ESim.GetEsim(context.Background(), params)
-            if err != nil {
-              panic(err)
-            }
-
-            fmt.Print(response)
   /esim/{iccid}/device:
     get:
       summary: Get eSIM Device
@@ -1448,30 +1207,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-            response, err := client.ESim.GetEsimDevice(context.Background(),
-            "iccid")
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /esim/{iccid}/history:
     get:
       summary: Get eSIM History
@@ -1563,30 +1298,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-            response, err := client.ESim.GetEsimHistory(context.Background(),
-            "iccid")
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /esim/{iccid}/mac:
     get:
       summary: Get eSIM MAC
@@ -1665,30 +1376,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-            response, err := client.ESim.GetEsimMac(context.Background(),
-            "iccid")
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
 tags:
   - name: Destinations
     description: Destinations encapsulate the various countries & regions that
