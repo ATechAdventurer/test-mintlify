@@ -5,7 +5,7 @@
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
-  "openapi":"api-reference/openapi.yaml",
+  "openapi":"/api-reference/openapi.yaml",
   "favicon": "/favicon.svg",
   "colors": {
     "primary": "#0D9373",
