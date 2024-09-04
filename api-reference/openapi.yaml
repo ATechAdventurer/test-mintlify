@@ -151,30 +151,6 @@ paths:
             var response = await client.Destinations.ListDestinationsAsync();
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-            response, err :=
-            client.Destinations.ListDestinations(context.Background())
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /packages:
     get:
       summary: List Packages
@@ -197,7 +173,7 @@ paths:
           schema:
             type: string
             format: date
-            example: 2023-11-01
+            example: 2023-11-01T00:00:00.000Z
         - in: query
           name: endDate
           description: End date of the package's validity in the format 'yyyy-MM-dd'. End
@@ -205,7 +181,7 @@ paths:
           schema:
             type: string
             format: date
-            example: 2023-11-20
+            example: 2023-11-20T00:00:00.000Z
         - in: query
           name: afterCursor
           description: To get the next batch of results, use this parameter. It tells the
@@ -325,42 +301,12 @@ paths:
 
 
             var response = await client.Packages.ListPackagesAsync("FRA",
-            "2023-11-01", "2023-11-20",
+            "2023-11-01T00:00:00.000Z", "2023-11-20T00:00:00.000Z",
             "Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA",
-            20, 8, 2, 8.44);
+            20, 2, 3, 6.14);
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/packages"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-
-            params := packages.ListPackagesRequestParams{}
-
-
-
-            response, err := client.Packages.ListPackages(context.Background(),
-            params)
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /purchases:
     post:
       summary: Create Purchase
@@ -388,14 +334,14 @@ paths:
                 startDate:
                   type: string
                   format: date
-                  example: 2023-11-01
+                  example: 2023-11-01T00:00:00.000Z
                   description: Start date of the package's validity in the format 'yyyy-MM-dd'.
                     This date can be set to the current day or any day within
                     the next 12 months.
                 endDate:
                   type: string
                   format: date
-                  example: 2023-11-20
+                  example: 2023-11-20T00:00:00.000Z
                   description: End date of the package's validity in the format 'yyyy-MM-dd'. End
                     date can be maximum 90 days after Start date.
                 email:
@@ -453,19 +399,19 @@ paths:
                       startDate:
                         type: string
                         format: date-time
-                        example: 2023-11-01T00:00:00+02:00
+                        example: 2023-10-31T22:00:00.000Z
                         description: Start date of the package's validity in the format
                           'yyyy-MM-ddThh:mm:ssZZ'
                       endDate:
                         type: string
                         format: date-time
-                        example: 2023-11-20T23:59:59+02:00
+                        example: 2023-11-20T21:59:59.000Z
                         description: End date of the package's validity in the format
                           'yyyy-MM-ddThh:mm:ssZZ'
                       createdDate:
                         type: string
                         format: date-time
-                        example: 2023-10-20T00:00:00+00:00
+                        example: 2023-10-20T00:00:00.000Z
                         description: Creation date of the purchase in the format 'yyyy-MM-ddThh:mm:ssZZ'
                       startTime:
                         deprecated: true
@@ -523,51 +469,14 @@ paths:
             var client = new TestSdkClient();
 
 
-            var input = new CreatePurchaseRequest("FRA", 1, "2023-11-01",
-            "2023-11-20");
+            var input = new CreatePurchaseRequest("FRA", 1,
+            "2023-11-01T00:00:00.000Z", "2023-11-20T00:00:00.000Z");
 
 
             var response = await client.Purchases.CreatePurchaseAsync(input);
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/purchases"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-
-            request := purchases.CreatePurchaseRequest{}
-
-            request.SetDestination("Destination")
-
-            request.SetDataLimitInGb(float64(123))
-
-            request.SetStartDate("StartDate")
-
-            request.SetEndDate("EndDate")
-
-
-            response, err :=
-            client.Purchases.CreatePurchase(context.Background(), request)
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
     get:
       summary: List Purchases
       description: This endpoint can be used to list all the successful purchases made
@@ -591,7 +500,7 @@ paths:
           schema:
             type: string
             format: date
-            example: 2023-11-01
+            example: 2023-11-01T00:00:00.000Z
         - in: query
           name: beforeDate
           description: End date of the interval for filtering purchases in the format
@@ -599,7 +508,7 @@ paths:
           schema:
             type: string
             format: date
-            example: 2023-11-20
+            example: 2023-11-20T00:00:00.000Z
         - in: query
           name: referenceId
           description: The referenceId that was provided by the partner during the
@@ -658,19 +567,19 @@ paths:
                         startDate:
                           type: string
                           format: date-time
-                          example: 2023-11-01T00:00:00+02:00
+                          example: 2023-10-31T22:00:00.000Z
                           description: Start date of the package's validity in the format
                             'yyyy-MM-ddThh:mm:ssZZ'
                         endDate:
                           type: string
                           format: date-time
-                          example: 2023-11-20T23:59:59+02:00
+                          example: 2023-11-20T21:59:59.000Z
                           description: End date of the package's validity in the format
                             'yyyy-MM-ddThh:mm:ssZZ'
                         createdDate:
                           type: string
                           format: date-time
-                          example: 2023-10-20T00:00:00+00:00
+                          example: 2023-10-20T00:00:00.000Z
                           description: Creation date of the purchase in the format 'yyyy-MM-ddThh:mm:ssZZ'
                         startTime:
                           deprecated: true
@@ -772,42 +681,13 @@ paths:
 
             var response = await
             client.Purchases.ListPurchasesAsync("1111222233334444555",
-            "2023-11-01", "2023-11-20", "abc111222333444",
+            "2023-11-01T00:00:00.000Z", "2023-11-20T00:00:00.000Z",
+            "abc111222333444",
             "Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA",
-            20, 2.38, 3.34);
+            20, 1.7, 2.37);
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/purchases"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-
-            params := purchases.ListPurchasesRequestParams{}
-
-
-
-            response, err :=
-            client.Purchases.ListPurchases(context.Background(), params)
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /purchases/topup:
     post:
       summary: Top-up eSIM
@@ -839,14 +719,14 @@ paths:
                 startDate:
                   type: string
                   format: date
-                  example: 2023-11-01
+                  example: 2023-11-01T00:00:00.000Z
                   description: Start date of the package's validity in the format 'yyyy-MM-dd'.
                     This date can be set to the current day or any day within
                     the next 12 months.
                 endDate:
                   type: string
                   format: date
-                  example: 2023-11-20
+                  example: 2023-11-20T00:00:00.000Z
                   description: End date of the package's validity in the format 'yyyy-MM-dd'. End
                     date can be maximum 90 days after Start date.
                 email:
@@ -898,19 +778,19 @@ paths:
                       startDate:
                         type: string
                         format: date-time
-                        example: 2023-11-01T00:00:00+02:00
+                        example: 2023-10-31T22:00:00.000Z
                         description: Start date of the package's validity in the format
                           'yyyy-MM-ddThh:mm:ssZZ'
                       endDate:
                         type: string
                         format: date-time
-                        example: 2023-11-20T23:59:59+02:00
+                        example: 2023-11-20T21:59:59.000Z
                         description: End date of the package's validity in the format
                           'yyyy-MM-ddThh:mm:ssZZ'
                       createdDate:
                         type: string
                         format: date-time
-                        example: 2023-10-20T00:00:00+00:00
+                        example: 2023-10-20T00:00:00.000Z
                         description: Creation date of the purchase in the format 'yyyy-MM-ddThh:mm:ssZZ'
                       startTime:
                         deprecated: true
@@ -963,50 +843,13 @@ paths:
 
 
             var input = new TopUpEsimRequest("1111222233334444555", 1,
-            "2023-11-01", "2023-11-20");
+            "2023-11-01T00:00:00.000Z", "2023-11-20T00:00:00.000Z");
 
 
             var response = await client.Purchases.TopUpEsimAsync(input);
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/purchases"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-
-            request := purchases.TopUpEsimRequest{}
-
-            request.SetIccid("Iccid")
-
-            request.SetDataLimitInGb(float64(123))
-
-            request.SetStartDate("StartDate")
-
-            request.SetEndDate("EndDate")
-
-
-            response, err := client.Purchases.TopUpEsim(context.Background(),
-            request)
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /purchases/edit:
     post:
       summary: Edit Purchase
@@ -1036,14 +879,14 @@ paths:
                 startDate:
                   type: string
                   format: date
-                  example: 2023-11-01
+                  example: 2023-11-01T00:00:00.000Z
                   description: Start date of the package's validity in the format 'yyyy-MM-dd'.
                     This date can be set to the current day or any day within
                     the next 12 months.
                 endDate:
                   type: string
                   format: date
-                  example: 2023-11-20
+                  example: 2023-11-20T00:00:00.000Z
                   description: End date of the package's validity in the format 'yyyy-MM-dd'. End
                     date can be maximum 90 days after Start date.
                 startTime:
@@ -1072,13 +915,13 @@ paths:
                   newStartDate:
                     type: string
                     format: date-time
-                    example: 2023-11-01T00:00:00+02:00
+                    example: 2023-10-31T22:00:00.000Z
                     description: Start date of the package's validity in the format
                       'yyyy-MM-ddThh:mm:ssZZ'
                   newEndDate:
                     type: string
                     format: date-time
-                    example: 2023-11-20T23:59:59+02:00
+                    example: 2023-11-20T21:59:59.000Z
                     description: End date of the package's validity in the format
                       'yyyy-MM-ddThh:mm:ssZZ'
                   newStartTime:
@@ -1125,48 +968,13 @@ paths:
 
             var input = new
             EditPurchaseRequest("ae471106-c8b4-42cf-b83a-b061291f2922",
-            "2023-11-01", "2023-11-20");
+            "2023-11-01T00:00:00.000Z", "2023-11-20T00:00:00.000Z");
 
 
             var response = await client.Purchases.EditPurchaseAsync(input);
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/purchases"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-
-            request := purchases.EditPurchaseRequest{}
-
-            request.SetPurchaseId("PurchaseId")
-
-            request.SetStartDate("StartDate")
-
-            request.SetEndDate("EndDate")
-
-
-            response, err := client.Purchases.EditPurchase(context.Background(),
-            request)
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /purchases/{purchaseId}/consumption:
     get:
       summary: Get Purchase Consumption
@@ -1237,31 +1045,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-            response, err :=
-            client.Purchases.GetPurchaseConsumption(context.Background(),
-            "purchaseId")
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /esim:
     get:
       summary: Get eSIM Status
@@ -1345,29 +1128,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: |-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-              "github.com/swagger-api/swagger-petstore/pkg/esim"
-            )
-
-            config := testsdkconfig.NewConfig()
-            client := testsdk.NewTestSdk(config)
-
-
-            params := esim.GetEsimRequestParams{}
-            params.SetIccid("string")
-
-            response, err := client.ESim.GetEsim(context.Background(), params)
-            if err != nil {
-              panic(err)
-            }
-
-            fmt.Print(response)
   /esim/{iccid}/device:
     get:
       summary: Get eSIM Device
@@ -1448,30 +1208,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-            response, err := client.ESim.GetEsimDevice(context.Background(),
-            "iccid")
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /esim/{iccid}/history:
     get:
       summary: Get eSIM History
@@ -1520,7 +1256,7 @@ paths:
                             statusDate:
                               type: string
                               format: date-time
-                              example: 2023-10-20T00:00:00+00:00
+                              example: 2023-10-20T00:00:00.000Z
                               description: The date when the eSIM status changed in the format
                                 'yyyy-MM-ddThh:mm:ssZZ'
                             date:
@@ -1563,30 +1299,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-            response, err := client.ESim.GetEsimHistory(context.Background(),
-            "iccid")
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
   /esim/{iccid}/mac:
     get:
       summary: Get eSIM MAC
@@ -1665,30 +1377,6 @@ paths:
 
 
             Console.WriteLine(response);
-        - lang: go
-          source: >-
-            import (
-              "fmt"
-              "encoding/json"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
-              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
-            )
-
-
-            config := testsdkconfig.NewConfig()
-
-            client := testsdk.NewTestSdk(config)
-
-
-            response, err := client.ESim.GetEsimMac(context.Background(),
-            "iccid")
-
-            if err != nil {
-              panic(err)
-            }
-
-
-            fmt.Print(response)
 tags:
   - name: Destinations
     description: Destinations encapsulate the various countries & regions that
