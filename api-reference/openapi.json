@@ -1,1318 +1,1717 @@
-{
-  "openapi": "3.0.3",
-  "info": {
-    "title": "T-Mobile DevEdge API",
-    "description": "SDKs for the T-Mobile DevEdge API.\n**Note:** You must have an active <a href='/dashboard/subscription'>subscription</a> in order to <a href='/documentation-hub/api-security/base-url'>view the base URL</a>.",
-    "license": {
-      "name": "Apache 2.0",
-      "url": "https://www.apache.org/licenses/LICENSE-2.0.html"
-    },
-    "version": "0.0.1",
-    "contact": {
-      "name": "T-Mobile Developer Support",
-      "url": "https://developer.t-mobile.com/support"
-    }
-  },
-  "servers": [
-    {
-      "url": "https://naas.t-mobile.com"
-    },
-    {
-      "url": "{apiRoot}/{basePath}",
-      "variables": {
-        "apiRoot": {
-          "description": "The DevEdge QoD <a href='/documentation-hub/api-security/base-url'>base URL</a>",
-          "default": "https://naas.t-mobile.com"
-        },
-        "basePath": {
-          "default": "qod/v0",
-          "description": "Base path for the QoD API"
-        }
-      }
-    }
-  ],
-  "tags": [
-    {
-      "name": "Connectivity",
-      "description": "Operations related to SIM cards and devices.",
-      "x-displayName": "Connectivity"
-    },
-    {
-      "name": "Device Location",
-      "description": "Operations related device locations.",
-      "x-displayName": "Device Location"
-    },
-    {
-      "name": "QoS sessions",
-      "x-displayName": "QoS sessions"
-    },
-    {
-      "name": "Session notifications callback",
-      "x-displayName": "Session notifications callback"
-    }
-  ],
-  "paths": {
-    "/iot-connectivity/v1/devices/{iccid}": {
-      "get": {
-        "tags": [
-          "Connectivity"
-        ],
-        "x-codeSamples": [
-          {
-            "lang": "Python",
-            "source": "from t_mobile_dev_edge import TMobileDevEdge, Environment\n\nsdk = TMobileDevEdge(\n    client_id=\"\",\n    client_secret=\"\",\n    private_key=\"\",\n    base_url=Environment.DEFAULT.value\n)\n\nresult = sdk.connectivity.get_device_details(\n    iccid=\"iccid\",\n    x_transaction_id=\"X-transaction-id\"\n)\""
-          },
-          {
-            "lang": "Go",
-            "source": "import (\n  \"fmt\"\n  \"encoding/json\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedgeconfig\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedge\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/connectivity\"\n)\n\nconfig := tmobiledevedgeconfig.NewConfig()\nclient := tmobiledevedge.NewTMobileDevEdge(config)\n\n\nparams := connectivity.GetDeviceDetailsRequestParams{}\n\n\nresponse, err := client.Connectivity.GetDeviceDetails(context.Background(), \"iccid\", params)\nif err != nil {\n  panic(err)\n}\n\nfmt.Print(response)"
-          }
-        ],
-        "summary": "Returns detailed connectivity information about a specified SIM card.",
-        "description": "Returns detailed connectivity information about a specified SIM card.",
-        "operationId": "GetDeviceDetails",
-        "parameters": [
-          {
-            "name": "iccid",
-            "in": "path",
-            "description": "The SIM card's ICCID.",
-            "required": true,
-            "schema": {
-              "type": "string"
-            },
-            "example": "8901882024109918312"
-          },
-          {
-            "$ref": "#/components/parameters/TransactionId"
-          }
-        ],
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/DeviceDetailsResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/GenericError"
-          },
-          "404": {
-            "$ref": "#/components/responses/GenericError"
-          },
-          "500": {
-            "$ref": "#/components/responses/GenericError"
-          },
-          "503": {
-            "$ref": "#/components/responses/GenericError"
-          }
-        }
-      }
-    },
-    "/iot-location/v1/locationCheck": {
-      "post": {
-        "x-codeSamples": [
-          {
-            "lang": "Python",
-            "source": "from t_mobile_dev_edge import TMobileDevEdge, Environment\nfrom t_mobile_dev_edge.models import DeviceLocationRequest\n\nsdk = TMobileDevEdge(\n    client_id=\"\",\n    client_secret=\"\",\n    private_key=\"\",\n    base_url=Environment.DEFAULT.value\n)\n\nrequest_body = DeviceLocationRequest(\n    iccid=\"8901882024109918312\",\n    horizontal_precision=\"AREA\",\n    resp_time_out=30,\n    max_cache_age=300\n)\n\nresult = sdk.device_location.location_check(request_body=request_body)"
-          },
-          {
-            "lang": "Go",
-            "source": "\n  import (\n  \"fmt\"\n  \"encoding/json\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedgeconfig\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedge\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/devicelocation\"\n)\n\nconfig := tmobiledevedgeconfig.NewConfig()\nclient := tmobiledevedge.NewTMobileDevEdge(config)\n\n\nrequest := devicelocation.DeviceLocationRequest{}\n\nresponse, err := client.DeviceLocation.LocationCheck(context.Background(), request)\nif err != nil {\n  panic(err)\n}\n\nfmt.Print(response)\n  "
-          }
-        ],
-        "tags": [
-          "Device Location"
-        ],
-        "summary": "Returns location details about a specified SIM.",
-        "description": "Returns location details about a specified SIM.",
-        "operationId": "LocationCheck",
-        "requestBody": {
-          "$ref": "#/components/requestBodies/DeviceLocationRequest"
-        },
-        "responses": {
-          "200": {
-            "$ref": "#/components/responses/DeviceLocationResponse"
-          },
-          "400": {
-            "$ref": "#/components/responses/GenericError"
-          },
-          "404": {
-            "$ref": "#/components/responses/GenericError"
-          },
-          "500": {
-            "$ref": "#/components/responses/GenericError"
-          },
-          "503": {
-            "$ref": "#/components/responses/GenericError"
-          }
-        }
-      }
-    },
-    "/sessions": {
-      "post": {
-        "x-codeSamples": [
-          {
-            "lang": "Python",
-            "source": "from t_mobile_dev_edge import TMobileDevEdge, Environment\nfrom t_mobile_dev_edge.models import CreateSession\n\nsdk = TMobileDevEdge(\n    client_id=\"\",\n    client_secret=\"\",\n    private_key=\"\",\n    base_url=Environment.DEFAULT.value\n)\n\nrequest_body = CreateSession(\n    duration=86400,\n    ue_id={\n        \"external_id\": \"123456789@domain.com\",\n        \"msisdn\": \"123456789\",\n        \"ipv4addr\": \"192.168.0.1/24\",\n        \"ipv6addr\": \"2001:db8:85a3:8d3:1319:8a2e:370:7344\"\n    },\n    as_id={\n        \"ipv4addr\": \"192.168.0.1/24\",\n        \"ipv6addr\": \"2001:db8:85a3:8d3:1319:8a2e:370:7344\"\n    },\n    ue_ports={\n        \"ranges\": [\n            {\n                \"from_\": 45217,\n                \"to\": 63830\n            }\n        ],\n        \"ports\": [\n            36703\n        ]\n    },\n    as_ports={\n        \"ranges\": [\n            {\n                \"from_\": 45217,\n                \"to\": 63830\n            }\n        ],\n        \"ports\": [\n            36703\n        ]\n    },\n    qos=\"QOS_E\",\n    notification_url=\"https://application-server.com\",\n    notification_auth_token=\"c8974e592c2fa383d4a3960714\"\n)\n\nresult = sdk.qo_s_sessions.create_session(\n    request_body=request_body,\n    authorization=\"Authorization\",\n    x_authorization=\"X-Authorization\",\n    x_transaction_id=\"X-transaction-id\"\n)"
-          },
-          {
-            "lang": "Go",
-            "source": "\n  import (\n  \"fmt\"\n  \"encoding/json\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedgeconfig\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedge\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/qossessions\"\n)\n\nconfig := tmobiledevedgeconfig.NewConfig()\nclient := tmobiledevedge.NewTMobileDevEdge(config)\n\n\nparams := qossessions.CreateSessionRequestParams{}\n\n\n\nueId := qossessions.UeId{}\n\n\nasId := qossessions.AsId{}\n\nqosProfile := qossessions.QOS_PROFILE_QOS_E\n\nrequest := qossessions.CreateSession{}\nrequest.SetUeId(ueId)\nrequest.SetAsId(asId)\nrequest.SetQos(qosProfile)\n\nresponse, err := client.QoSSessions.CreateSession(context.Background(), request, params)\nif err != nil {\n  panic(err)\n}\n\nfmt.Print(response)\n  "
-          }
-        ],
-        "tags": [
-          "QoS sessions"
-        ],
-        "summary": "Creates a new session",
-        "description": "Creates a new QoS session on demand",
-        "operationId": "createSession",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/AccessToken"
-          },
-          {
-            "$ref": "#/components/parameters/PopToken"
-          },
-          {
-            "$ref": "#/components/parameters/TransactionId"
-          }
-        ],
-        "requestBody": {
-          "description": "Creates a new session",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateSession"
-              }
+openapi: 3.0.2
+info:
+  title: CELITECH API
+  version: 1.1.0
+  contact:
+    name: CELITECH
+    email: support@celitech.com
+  description: >
+    Welcome to the CELITECH API documentation!
+
+
+    Useful links: [Homepage](https://www.celitech.com) | [Support
+    email](mailto:support@celitech.com) | [Blog](https://www.celitech.com/blog/)
+
+
+    # Introduction
+
+
+    This guide is your go-to resource for the CELITECH API, with full
+    documentation and schemas.
+
+
+    Need help? Email us at support@celitech.com.
+
+
+    "Partners" refers to online service providers that use our eSIM API. Access
+    levels include Gold, Platinum, and Diamond.
+
+
+    ## API
+
+
+    The CELITECH API is designed for use by partner platforms, including both
+    web and mobile applications. It's assumed all endpoint calls are initiated
+    from the backend of an integrated platform.
+
+
+    API URL: `https://api.celitech.net/v1`
+
+
+    ## Authentication & Authorization
+
+    CELITECH API uses the OAuth 2.0 protocol for authentication and
+    authorization.
+
+    The endpoints are protected using client credentials flow which is based on
+    a token exchange. The token has a defined life span (typically 1 hour),
+    after which a new token must be obtained.
+
+
+    To begin, obtain OAuth 2.0 client credentials ( **CLIENT_ID** &
+    **CLIENT_SECRET** ) from the [CELITECH
+    Dashboard](https://www.dashboard.celitech.com/). Then your client
+    application requests an access token from the CELITECH Authorization Server,
+    extracts a token from the response, and sends the token to the CELITECH API
+    that you want to access.
+
+
+    Security Scheme Type: `OAuth2`
+
+
+    Flow type: `clientCredentials`
+
+
+    Token URL: `https://auth.celitech.net/oauth2/token`
+  x-logo:
+    url: /logo.png
+    altText: CELITECH API
+servers:
+  - url: https://api.celitech.net/v1
+components:
+  securitySchemes:
+    oAuth2ClientCredentials:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.celitech.net/oauth2/token
+          scopes: {}
+security:
+  - oAuth2ClientCredentials: []
+paths:
+  /destinations:
+    get:
+      summary: List Destinations
+      operationId: listDestinations
+      description: List Destinations
+      tags:
+        - Destinations
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  destinations:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          example: France
+                          description: Name of the destination
+                        destination:
+                          type: string
+                          example: FRA
+                          description: ISO representation of the destination
+                        supportedCountries:
+                          type: array
+                          example:
+                            - France
+                          items:
+                            type: string
+                          description: This array indicates the geographical area covered by a specific
+                            destination. If the destination represents a single
+                            country, the array will include that country.
+                            However, if the destination represents a broader
+                            regional scope, the array will be populated with the
+                            names of the countries belonging to that region.
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: |-
+            using TestSdk;
+
+            var client = new TestSdkClient();
+
+            var response = await client.Destinations.ListDestinationsAsync();
+
+            Console.WriteLine(response);
+        - lang: go
+          source: >-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+            )
+
+
+            config := testsdkconfig.NewConfig()
+
+            client := testsdk.NewTestSdk(config)
+
+
+            response, err :=
+            client.Destinations.ListDestinations(context.Background())
+
+            if err != nil {
+              panic(err)
             }
-          },
-          "required": true
-        },
-        "responses": {
-          "201": {
-            "description": "Session created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SessionInfo"
-                }
-              }
+
+
+            fmt.Print(response)
+  /packages:
+    get:
+      summary: List Packages
+      description: List Packages
+      operationId: listPackages
+      tags:
+        - Packages
+      parameters:
+        - in: query
+          name: destination
+          description: ISO representation of the package's destination.
+          schema:
+            type: string
+            example: FRA
+        - in: query
+          name: startDate
+          description: Start date of the package's validity in the format 'yyyy-MM-dd'.
+            This date can be set to the current day or any day within the next
+            12 months.
+          schema:
+            type: string
+            format: date
+            example: 2023-11-01
+        - in: query
+          name: endDate
+          description: End date of the package's validity in the format 'yyyy-MM-dd'. End
+            date can be maximum 90 days after Start date.
+          schema:
+            type: string
+            format: date
+            example: 2023-11-20
+        - in: query
+          name: afterCursor
+          description: To get the next batch of results, use this parameter. It tells the
+            API where to start fetching data after the last item you received.
+            It helps you avoid repeats and efficiently browse through large sets
+            of data.
+          schema:
+            type: string
+            example: Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA
+        - in: query
+          name: limit
+          description: Maximum number of packages to be returned in the response. The
+            value must be greater than 0 and less than or equal to 160. If not
+            provided, the default value is 20
+          schema:
+            type: number
+            example: 20
+        - in: query
+          name: startTime
+          deprecated: true
+          description: Epoch value representing the start time of the package's validity.
+            This timestamp can be set to the current time or any time within the
+            next 12 months
+          schema:
+            type: integer
+        - in: query
+          name: endTime
+          deprecated: true
+          description: Epoch value representing the end time of the package's validity.
+            End time can be maximum 90 days after Start time
+          schema:
+            type: integer
+        - in: query
+          name: duration
+          deprecated: true
+          description: Duration in seconds for the package's validity. If this parameter
+            is present, it will override the startTime and endTime parameters.
+            The maximum duration for a package's validity period is 90 days
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  packages:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 4973fa15-6979-4daa-9cf3-672620df819c
+                          description: ID of the package
+                        destination:
+                          type: string
+                          example: FRA
+                          description: ISO representation of the package's destination
+                        dataLimitInBytes:
+                          type: number
+                          example: 1073741824
+                          description: Size of the package in Bytes
+                        minDays:
+                          type: number
+                          example: 0
+                          description: Min number of days for the package
+                        maxDays:
+                          type: number
+                          example: 30
+                          description: Max number of days for the package
+                        priceInCents:
+                          type: number
+                          example: 10000
+                          description: Price of the package in cents
+                  afterCursor:
+                    type: string
+                    example: Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA
+                    description: The cursor value representing the end of the current page of
+                      results. Use this cursor value as the "afterCursor"
+                      parameter in your next request to retrieve the subsequent
+                      page of results. It ensures that you continue fetching
+                      data from where you left off, facilitating smooth
+                      pagination
+                    nullable: true
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: >-
+            using TestSdk;
+
+
+            var client = new TestSdkClient();
+
+
+            var response = await client.Packages.ListPackagesAsync("FRA",
+            "2023-11-01", "2023-11-20",
+            "Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA",
+            20, 8, 2, 8.44);
+
+
+            Console.WriteLine(response);
+        - lang: go
+          source: >-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+              "github.com/swagger-api/swagger-petstore/pkg/packages"
+            )
+
+
+            config := testsdkconfig.NewConfig()
+
+            client := testsdk.NewTestSdk(config)
+
+
+
+            params := packages.ListPackagesRequestParams{}
+
+
+
+            response, err := client.Packages.ListPackages(context.Background(),
+            params)
+
+            if err != nil {
+              panic(err)
             }
-          },
-          "400": {
-            "description": "Invalid input",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInfo"
-                },
-                "examples": {
-                  "Generic400": {
-                    "summary": "Schema validation failed",
-                    "value": {
-                      "reasonCode": "ERR-4000",
-                      "systemMessage": "Bad Request",
-                      "userMessage": "Schema validation failed at  ..."
-                    }
-                  },
-                  "MsisdnRequired": {
-                    "summary": "msisdn is required as part of ueId",
-                    "value": {
-                      "reasonCode": "ERR-4000",
-                      "systemMessage": "Bad Request",
-                      "userMessage": "Expected property is missing: ueId.msisdn"
-                    }
-                  },
-                  "IPv4Required": {
-                    "summary": "ipv4addr is required as part of ueId",
-                    "value": {
-                      "reasonCode": "ERR-4000",
-                      "systemMessage": "Bad Request",
-                      "userMessage": "Expected property is missing: ueId.ipv4addr"
-                    }
-                  },
-                  "IPRequired": {
-                    "summary": "Some IP address is required as part of ueId",
-                    "value": {
-                      "reasonCode": "ERR-4000",
-                      "systemMessage": "Bad Request",
-                      "userMessage": "Expected property is missing: ueId.ipv4addr or ueId.ipv6addr"
-                    }
-                  },
-                  "UePortsRequired": {
-                    "summary": "uePorts is required",
-                    "value": {
-                      "reasonCode": "ERR-4000",
-                      "systemMessage": "Bad Request",
-                      "userMessage": "Expected property is missing: uePorts"
-                    }
-                  },
-                  "QoSRequired": {
-                    "summary": "qos is required",
-                    "value": {
-                      "reasonCode": "ERR-4000",
-                      "systemMessage": "Bad Request",
-                      "userMessage": "Expected property is missing: qos"
-                    }
-                  },
-                  "UePortsRangesNotAllowed": {
-                    "summary": "Ranges at uePorts are not allowed",
-                    "value": {
-                      "reasonCode": "ERR-4000",
-                      "systemMessage": "Bad Request",
-                      "userMessage": "Ranges not allowed: uePorts"
-                    }
-                  }
-                }
-              }
+
+
+            fmt.Print(response)
+  /purchases:
+    post:
+      summary: Create Purchase
+      description: This endpoint is used to purchase a new eSIM by providing the
+        package details.
+      operationId: createPurchase
+      tags:
+        - Purchases
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                destination:
+                  type: string
+                  example: FRA
+                  description: ISO representation of the package's destination
+                dataLimitInGB:
+                  type: number
+                  example: 1
+                  description: Size of the package in GB. The available options are 1, 2, 3, 5, 8,
+                    20GB
+                startDate:
+                  type: string
+                  format: date
+                  example: 2023-11-01
+                  description: Start date of the package's validity in the format 'yyyy-MM-dd'.
+                    This date can be set to the current day or any day within
+                    the next 12 months.
+                endDate:
+                  type: string
+                  format: date
+                  example: 2023-11-20
+                  description: End date of the package's validity in the format 'yyyy-MM-dd'. End
+                    date can be maximum 90 days after Start date.
+                email:
+                  type: string
+                  example: example@domain.com
+                  description: Email address where the purchase confirmation email will be sent
+                    (including QR Code & activation steps)
+                referenceId:
+                  type: string
+                  example: abc111222333444
+                  description: An identifier provided by the partner to link this purchase to
+                    their booking or transaction for analytics and debugging
+                    purposes.
+                networkBrand:
+                  type: string
+                  example: CELITECH
+                  description: Customize the network brand of the issued eSIM. This parameter is
+                    accessible to platforms with Diamond tier and requires an
+                    alphanumeric string of up to 15 characters
+                startTime:
+                  deprecated: true
+                  type: number
+                  description: Epoch value representing the start time of the package's validity.
+                    This timestamp can be set to the current time or any time
+                    within the next 12 months.
+                endTime:
+                  deprecated: true
+                  type: number
+                  description: Epoch value representing the end time of the package's validity.
+                    End time can be maximum 90 days after Start time.
+              required:
+                - destination
+                - dataLimitInGB
+                - startDate
+                - endDate
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchase:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 1b97b67a-f4ea-45ff-bbc1-8f424b1418c4
+                        description: ID of the purchase
+                      packageId:
+                        type: string
+                        example: 6cf19d46-b545-4029-a46b-cdeba22b6957
+                        description: ID of the package
+                      startDate:
+                        type: string
+                        format: date-time
+                        example: 2023-11-01T00:00:00+02:00
+                        description: Start date of the package's validity in the format
+                          'yyyy-MM-ddThh:mm:ssZZ'
+                      endDate:
+                        type: string
+                        format: date-time
+                        example: 2023-11-20T23:59:59+02:00
+                        description: End date of the package's validity in the format
+                          'yyyy-MM-ddThh:mm:ssZZ'
+                      createdDate:
+                        type: string
+                        format: date-time
+                        example: 2023-10-20T00:00:00+00:00
+                        description: Creation date of the purchase in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                      startTime:
+                        deprecated: true
+                        type: number
+                        description: Epoch value representing the start time of the package's validity
+                      endTime:
+                        deprecated: true
+                        type: number
+                        description: Epoch value representing the end time of the package's validity
+                  profile:
+                    type: object
+                    properties:
+                      iccid:
+                        type: string
+                        example: "1111222233334444555"
+                        description: ID of the eSIM
+                        minLength: 18
+                        maxLength: 22
+                      activationCode:
+                        type: string
+                        example: iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAYAAABccqhmAAAABmJLR0QA/wD/AP+gvaeTAAAHRklEQVR4nO3d245TMQwF0Bbx/79cnkc6QQRi7Mxe6xFV6aHtbEW52O/P5/N5AZF+dD8A0EcAQDABAMEEAAT7+fSP7/f7fz/HX1mtX66ef/f1u++70vU8u+97SvXznxqn6/fT5en5zQAgmACAYAIAggkACCYAINjjLsBK16nhU6usp1bFu55n2u7Aqeeftop+6nd+w9+LGQAEEwAQTABAMAEAwQQABNvaBVg5tYpbvWpavSredSa/6y7DKbd/77sm/b2YAUAwAQDBBAAEEwAQTABAsCO7ANOcOkvf9frV83edLb+lAtKp50liBgDBBAAEEwAQTABAMAEAwb7lLsBK9Rn4aWfIu/6/1fX2T+2e2B0wA4BoAgCCCQAIJgAgmACAYEd2Aaatmlav7t5+Fn3abkLaXYBJfy9mABBMAEAwAQDBBAAEEwAQbGsXYFoX11NOnVGvrvN/qqLOyi19E6Z9/rvjTGIGAMEEAAQTABBMAEAwAQDBHncBJp1Vvsm0Vd/q1fVpXY9PjX9qd+MGZgAQTABAMAEAwQQABBMAEOxIRaBbzqJX+67P01VhqauyUPXuQ9edgqf3NQOAYAIAggkACCYAIJgAgGCPuwBdZ9qdLf/966sr1Zzq0rtSfca+63db/blVMgOAYAIAggkACCYAIJgAgGAtFYGqz3jvql6l39W12r/SdWa++o5J1zinxj/x/ZoBQDABAMEEAAQTABBMAECwI92BT60Sd51pPzX+rq46/F3fY9eqfvXzd931ODGOGQAEEwAQTABAMAEAwQQABHt/HpYGp53B7upyuzKtf8G03Zld035vp9zQL8MMAIIJAAgmACCYAIBgAgCCjaoIdOrMc7VbutZOqj//euXdfTil8ns0A4BgAgCCCQAIJgAgmACAYC3dgbvq298yzsp3fc5dXf0Xur6vU+M/MQOAYAIAggkACCYAIJgAgGCPFYG2B2k6472r631XunZbbtkd6HrOleoKV9Xv+8QMAIIJAAgmACCYAIBgAgCCHekO3PX6la7V2pXdSke7Vs9Zvetxe6Wmlep+E139Mp6YAUAwAQDBBAAEEwAQTABAsK2KQNPO9q9Mq58/7fO8fbela7V/Zdr3u8MMAIIJAAgmACCYAIBgAgCCbXUHntYVt+tMe1flnBvOlk+0+/zV/99T36++AMA/EQAQTABAMAEAwQQABNvqC3DLavZKV6WaldtX12+/U7Byyy7Mib9HMwAIJgAgmACAYAIAggkACFbaHXilup58dV33U++7O061ad/j7vueMm21v3J8MwAIJgAgmACAYAIAggkACPa4CzCtEs6uaXXjq03bNejaDZm2a9P1O9EdGPgjAgCCCQAIJgAgmACAYI99AXZN6667a1rd+K5usx116X9n2vPsuuFuiBkABBMAEEwAQDABAMEEAAQ7UhFoOfiw+v9ddw2qV+NvOWO/65b3rVb5+zEDgGACAIIJAAgmACCYAIBgW3cBulZHu7oSd61Cdz3/Kbe877Q7ILtO7HaZAUAwAQDBBAAEEwAQTABAsMddgGl10avPrk+7s7Ay7Q5FVyWi6nGqx+/6vT0xA4BgAgCCCQAIJgAgmACAYFt3AbpWU6vPlk874z2ta23166t3GXbdUlnoxHOaAUAwAQDBBAAEEwAQTABAsK2+ALecXd81bfdh2ue80vX5d/U1mPY8u+PrCwB8IQAgmACAYAIAggkACHbkLsCp1eBpXW6nmVaZZ9odipXqfg0rk1b7V8wAIJgAgGACAIIJAAgmACDYVl+A3dXgU6vTXWfmp3Xpra7MU63rc1i5uZ7/KWYAEEwAQDABAMEEAAQTABBs6y7Arlv6CEzrhlxt9/m7dnOmra5Pq7ykLwDwTwQABBMAEEwAQDABAMGO7ALc0AX1b8bfXRU/Nf60yj/V40w7k9/Vl6FjN8QMAIIJAAgmACCYAIBgAgCCld4FWJlWz796VbxrtXx3nK7PeeWWfgQ3VygyA4BgAgCCCQAIJgAgmACAYI+7AF2r06fGv6UyT9eZ9q6z+ru67lzsjr9r0q6WGQAEEwAQTABAMAEAwQQABNvqDjzNqW7Fu6b1EbjlDH9XV+VqN1dYMgOAYAIAggkACCYAIJgAgGBbFYGmdUfdVd0Vt2t3YNpdiWln76t3GW6pUOQuAPCFAIBgAgCCCQAIJgAg2KjuwNMqrnR16T3lljsLXbsq1V2hd1XvejwxA4BgAgCCCQAIJgAgmACAYC3dgW+xu+o7rYLNd737sKtjdf31Ovd5nqp85S4A8IUAgGACAIIJAAgmACBY1C5A19n+21ePd02r83/q89l1w+/NDACCCQAIJgAgmACAYAIAgh3ZBZhWF/3UKvS0ij2nVo9Xqj+3ropJt3Qrrv5+n5gBQDABAMEEAAQTABBMAECw9+dhiXFaZZuV6j4C07ohp/1/u9xwhv8UMwAIJgAgmACAYAIAggkACPa4CwBkMAOAYAIAggkACCYAINgvCaqkMmOR1zUAAAAASUVORK5CYII=
+                        description: QR Code of the eSIM as base64
+                        minLength: 1000
+                        maxLength: 8000
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: >-
+            using TestSdk;
+
+            using TestSdk.Models;
+
+
+            var client = new TestSdkClient();
+
+
+            var input = new CreatePurchaseRequest("FRA", 1, "2023-11-01",
+            "2023-11-20");
+
+
+            var response = await client.Purchases.CreatePurchaseAsync(input);
+
+
+            Console.WriteLine(response);
+        - lang: go
+          source: >-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+              "github.com/swagger-api/swagger-petstore/pkg/purchases"
+            )
+
+
+            config := testsdkconfig.NewConfig()
+
+            client := testsdk.NewTestSdk(config)
+
+
+
+            request := purchases.CreatePurchaseRequest{}
+
+            request.SetDestination("Destination")
+
+            request.SetDataLimitInGb(float64(123))
+
+            request.SetStartDate("StartDate")
+
+            request.SetEndDate("EndDate")
+
+
+            response, err :=
+            client.Purchases.CreatePurchase(context.Background(), request)
+
+            if err != nil {
+              panic(err)
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/Generic401"
-          },
-          "403": {
-            "$ref": "#/components/responses/Generic403"
-          },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInfo"
-                },
-                "example": {
-                  "reasonCode": "ERR-409",
-                  "systemMessage": "CONFLICT",
-                  "userMessage": "Another session is created for the same UE"
-                }
-              }
+
+
+            fmt.Print(response)
+    get:
+      summary: List Purchases
+      description: This endpoint can be used to list all the successful purchases made
+        between a given interval.
+      operationId: listPurchases
+      tags:
+        - Purchases
+      parameters:
+        - in: query
+          name: iccid
+          description: ID of the eSIM
+          schema:
+            type: string
+            example: "1111222233334444555"
+            minLength: 18
+            maxLength: 22
+        - in: query
+          name: afterDate
+          description: Start date of the interval for filtering purchases in the format
+            'yyyy-MM-dd'
+          schema:
+            type: string
+            format: date
+            example: 2023-11-01
+        - in: query
+          name: beforeDate
+          description: End date of the interval for filtering purchases in the format
+            'yyyy-MM-dd'
+          schema:
+            type: string
+            format: date
+            example: 2023-11-20
+        - in: query
+          name: referenceId
+          description: The referenceId that was provided by the partner during the
+            purchase or topup flow.
+          schema:
+            type: string
+            example: abc111222333444
+        - in: query
+          name: afterCursor
+          description: To get the next batch of results, use this parameter. It tells the
+            API where to start fetching data after the last item you received.
+            It helps you avoid repeats and efficiently browse through large sets
+            of data.
+          schema:
+            type: string
+            example: Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA
+        - in: query
+          name: limit
+          description: Maximum number of purchases to be returned in the response. The
+            value must be greater than 0 and less than or equal to 100. If not
+            provided, the default value is 20
+          schema:
+            type: number
+            example: 20
+        - in: query
+          name: after
+          deprecated: true
+          description: Epoch value representing the start of the time interval for
+            filtering purchases
+          schema:
+            type: number
+        - in: query
+          name: before
+          description: Epoch value representing the end of the time interval for filtering
+            purchases
+          deprecated: true
+          schema:
+            type: number
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchases:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: 4973fa15-6979-4daa-9cf3-672620df819c
+                          description: ID of the purchase
+                        startDate:
+                          type: string
+                          format: date-time
+                          example: 2023-11-01T00:00:00+02:00
+                          description: Start date of the package's validity in the format
+                            'yyyy-MM-ddThh:mm:ssZZ'
+                        endDate:
+                          type: string
+                          format: date-time
+                          example: 2023-11-20T23:59:59+02:00
+                          description: End date of the package's validity in the format
+                            'yyyy-MM-ddThh:mm:ssZZ'
+                        createdDate:
+                          type: string
+                          format: date-time
+                          example: 2023-10-20T00:00:00+00:00
+                          description: Creation date of the purchase in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                        startTime:
+                          deprecated: true
+                          type: number
+                          description: Epoch value representing the start time of the package's validity
+                        endTime:
+                          deprecated: true
+                          type: number
+                          description: Epoch value representing the end time of the package's validity
+                        createdAt:
+                          deprecated: true
+                          type: number
+                          description: Epoch value representing the date of creation of the purchase
+                        package:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: 4973fa15-6979-4daa-9cf3-672620df819c
+                              description: ID of the package
+                            dataLimitInBytes:
+                              type: number
+                              example: 1073741824
+                              description: Size of the package in Bytes
+                            destination:
+                              type: string
+                              example: FRA
+                              description: ISO representation of the package's destination
+                            destinationName:
+                              type: string
+                              example: France
+                              description: Name of the package's destination
+                            priceInCents:
+                              type: number
+                              example: 10000
+                              description: Price of the package in cents
+                        esim:
+                          type: object
+                          properties:
+                            iccid:
+                              type: string
+                              example: "1111222233334444555"
+                              description: ID of the eSIM
+                              minLength: 18
+                              maxLength: 22
+                        source:
+                          type: string
+                          example: API
+                          description: The source indicates where the eSIM was purchased, which can be
+                            from the API, dashboard, landing-page or promo-page.
+                            For purchases made before September 8, 2023, the
+                            value will be displayed as 'Not available'.
+                        referenceId:
+                          type: string
+                          example: abc111222333444
+                          description: The referenceId that was provided by the partner during the
+                            purchase or topup flow. This identifier can be used
+                            for analytics and debugging purposes.
+                  afterCursor:
+                    type: string
+                    example: Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA
+                    description: The cursor value representing the end of the current page of
+                      results. Use this cursor value as the "afterCursor"
+                      parameter in your next request to retrieve the subsequent
+                      page of results. It ensures that you continue fetching
+                      data from where you left off, facilitating smooth
+                      pagination.
+                    nullable: true
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: >-
+            using TestSdk;
+
+
+            var client = new TestSdkClient();
+
+
+            var response = await
+            client.Purchases.ListPurchasesAsync("1111222233334444555",
+            "2023-11-01", "2023-11-20", "abc111222333444",
+            "Y3JlYXRlZEF0OjE1OTk0OTMwOTgsZGVzdGluYXRpb246QVVTLG1pbkRheXM6MCxkYXRhTGltaXRJbkJ5dGVzOjUzNjg3MDkxMjA",
+            20, 2.38, 3.34);
+
+
+            Console.WriteLine(response);
+        - lang: go
+          source: >-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+              "github.com/swagger-api/swagger-petstore/pkg/purchases"
+            )
+
+
+            config := testsdkconfig.NewConfig()
+
+            client := testsdk.NewTestSdk(config)
+
+
+
+            params := purchases.ListPurchasesRequestParams{}
+
+
+
+            response, err :=
+            client.Purchases.ListPurchases(context.Background(), params)
+
+            if err != nil {
+              panic(err)
             }
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInfo"
-                },
-                "example": {
-                  "reasonCode": "ERR-5000",
-                  "systemMessage": "Internal Server Error",
-                  "userMessage": "Sorry, something went wrong. Please try again later."
-                }
-              }
+
+
+            fmt.Print(response)
+  /purchases/topup:
+    post:
+      summary: Top-up eSIM
+      description: This endpoint is used to top-up an eSIM with the previously
+        associated destination by providing an existing ICCID and the package
+        details. The top-up is not feasible for eSIMs in "DELETED" or "ERROR"
+        state.
+      operationId: topUpESIM
+      tags:
+        - Purchases
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                iccid:
+                  type: string
+                  example: "1111222233334444555"
+                  description: ID of the eSIM
+                  minLength: 18
+                  maxLength: 22
+                dataLimitInGB:
+                  type: number
+                  example: 1
+                  description: Size of the package in GB. The available options are 1, 2, 3, 5, 8,
+                    20GB
+                startDate:
+                  type: string
+                  format: date
+                  example: 2023-11-01
+                  description: Start date of the package's validity in the format 'yyyy-MM-dd'.
+                    This date can be set to the current day or any day within
+                    the next 12 months.
+                endDate:
+                  type: string
+                  format: date
+                  example: 2023-11-20
+                  description: End date of the package's validity in the format 'yyyy-MM-dd'. End
+                    date can be maximum 90 days after Start date.
+                email:
+                  type: string
+                  example: example@domain.com
+                  description: Email address where the purchase confirmation email will be sent
+                    (excluding QR Code & activation steps)
+                referenceId:
+                  type: string
+                  example: abc111222333444
+                  description: An identifier provided by the partner to link this purchase to
+                    their booking or transaction for analytics and debugging
+                    purposes.
+                startTime:
+                  deprecated: true
+                  type: number
+                  description: Epoch value representing the start time of the package's validity.
+                    This timestamp can be set to the current time or any time
+                    within the next 12 months.
+                endTime:
+                  deprecated: true
+                  type: number
+                  description: Epoch value representing the end time of the package's validity.
+                    End time can be maximum 90 days after Start time.
+              required:
+                - iccid
+                - dataLimitInGB
+                - startDate
+                - endDate
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchase:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: 1b97b67a-f4ea-45ff-bbc1-8f424b1418c4
+                        description: ID of the purchase
+                      packageId:
+                        type: string
+                        example: 6cf19d46-b545-4029-a46b-cdeba22b6957
+                        description: ID of the package
+                      startDate:
+                        type: string
+                        format: date-time
+                        example: 2023-11-01T00:00:00+02:00
+                        description: Start date of the package's validity in the format
+                          'yyyy-MM-ddThh:mm:ssZZ'
+                      endDate:
+                        type: string
+                        format: date-time
+                        example: 2023-11-20T23:59:59+02:00
+                        description: End date of the package's validity in the format
+                          'yyyy-MM-ddThh:mm:ssZZ'
+                      createdDate:
+                        type: string
+                        format: date-time
+                        example: 2023-10-20T00:00:00+00:00
+                        description: Creation date of the purchase in the format 'yyyy-MM-ddThh:mm:ssZZ'
+                      startTime:
+                        deprecated: true
+                        type: number
+                        description: Epoch value representing the start time of the package's validity
+                      endTime:
+                        deprecated: true
+                        type: number
+                        description: Epoch value representing the end time of the package's validity
+                  profile:
+                    type: object
+                    properties:
+                      iccid:
+                        type: string
+                        example: "1111222233334444555"
+                        description: ID of the eSIM
+                        minLength: 18
+                        maxLength: 22
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: >-
+            using TestSdk;
+
+            using TestSdk.Models;
+
+
+            var client = new TestSdkClient();
+
+
+            var input = new TopUpEsimRequest("1111222233334444555", 1,
+            "2023-11-01", "2023-11-20");
+
+
+            var response = await client.Purchases.TopUpEsimAsync(input);
+
+
+            Console.WriteLine(response);
+        - lang: go
+          source: >-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+              "github.com/swagger-api/swagger-petstore/pkg/purchases"
+            )
+
+
+            config := testsdkconfig.NewConfig()
+
+            client := testsdk.NewTestSdk(config)
+
+
+
+            request := purchases.TopUpEsimRequest{}
+
+            request.SetIccid("Iccid")
+
+            request.SetDataLimitInGb(float64(123))
+
+            request.SetStartDate("StartDate")
+
+            request.SetEndDate("EndDate")
+
+
+            response, err := client.Purchases.TopUpEsim(context.Background(),
+            request)
+
+            if err != nil {
+              panic(err)
             }
-          },
-          "503": {
-            "$ref": "#/components/responses/Generic503"
-          }
-        },
-        "security": [
-          {
-            "oAuth2ClientCredentials": []
-          }
-        ]
-      }
-    },
-    "/sessions/{sessionId}": {
-      "get": {
-        "x-codeSamples": [
-          {
-            "lang": "Python",
-            "source": "from t_mobile_dev_edge import TMobileDevEdge, Environment\n\nsdk = TMobileDevEdge(\n    client_id=\"\",\n    client_secret=\"\",\n    private_key=\"\",\n    base_url=Environment.DEFAULT.value\n)\n\nresult = sdk.qo_s_sessions.get_session(\n    session_id=\"eu commodo\",\n    authorization=\"Authorization\",\n    x_authorization=\"X-Authorization\",\n    x_transaction_id=\"X-transaction-id\"\n)"
-          },
-          {
-            "lang": "Go",
-            "source": "\n  import (\n  \"fmt\"\n  \"encoding/json\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedgeconfig\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedge\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/qossessions\"\n)\n\nconfig := tmobiledevedgeconfig.NewConfig()\nclient := tmobiledevedge.NewTMobileDevEdge(config)\n\n\nparams := qossessions.GetSessionRequestParams{}\n\n\nresponse, err := client.QoSSessions.GetSession(context.Background(), \"sessionId\", params)\nif err != nil {\n  panic(err)\n}\n\nfmt.Print(response)\n  "
-          }
-        ],
-        "tags": [
-          "QoS sessions"
-        ],
-        "summary": "Get session information",
-        "operationId": "getSession",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/AccessToken"
-          },
-          {
-            "$ref": "#/components/parameters/PopToken"
-          },
-          {
-            "$ref": "#/components/parameters/TransactionId"
-          },
-          {
-            "name": "sessionId",
-            "in": "path",
-            "description": "Session ID that was obtained from the createSession operation",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/SessionId"
+
+
+            fmt.Print(response)
+  /purchases/edit:
+    post:
+      summary: Edit Purchase
+      description: This endpoint allows you to modify the dates of an existing package
+        with a future activation start time. Editing can only be performed for
+        packages that have not been activated, and it cannot change the package
+        size. The modification must not change the package duration category to
+        ensure pricing consistency.
+      operationId: editPurchase
+      tags:
+        - Purchases
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - purchaseId
+                - startDate
+                - endDate
+              properties:
+                purchaseId:
+                  type: string
+                  example: ae471106-c8b4-42cf-b83a-b061291f2922
+                  description: ID of the purchase
+                startDate:
+                  type: string
+                  format: date
+                  example: 2023-11-01
+                  description: Start date of the package's validity in the format 'yyyy-MM-dd'.
+                    This date can be set to the current day or any day within
+                    the next 12 months.
+                endDate:
+                  type: string
+                  format: date
+                  example: 2023-11-20
+                  description: End date of the package's validity in the format 'yyyy-MM-dd'. End
+                    date can be maximum 90 days after Start date.
+                startTime:
+                  deprecated: true
+                  type: number
+                  description: Epoch value representing the start time of the package's validity.
+                    This timestamp can be set to the current time or any time
+                    within the next 12 months.
+                endTime:
+                  deprecated: true
+                  type: number
+                  description: Epoch value representing the end time of the package's validity.
+                    End time can be maximum 90 days after Start time.
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  purchaseId:
+                    type: string
+                    example: ae471106-c8b4-42cf-b83a-b061291f2922
+                    description: ID of the purchase
+                  newStartDate:
+                    type: string
+                    format: date-time
+                    example: 2023-11-01T00:00:00+02:00
+                    description: Start date of the package's validity in the format
+                      'yyyy-MM-ddThh:mm:ssZZ'
+                  newEndDate:
+                    type: string
+                    format: date-time
+                    example: 2023-11-20T23:59:59+02:00
+                    description: End date of the package's validity in the format
+                      'yyyy-MM-ddThh:mm:ssZZ'
+                  newStartTime:
+                    deprecated: true
+                    type: number
+                    description: Epoch value representing the new start time of the package's
+                      validity
+                  newEndTime:
+                    deprecated: true
+                    type: number
+                    description: Epoch value representing the new end time of the package's validity
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: >-
+            using TestSdk;
+
+            using TestSdk.Models;
+
+
+            var client = new TestSdkClient();
+
+
+            var input = new
+            EditPurchaseRequest("ae471106-c8b4-42cf-b83a-b061291f2922",
+            "2023-11-01", "2023-11-20");
+
+
+            var response = await client.Purchases.EditPurchaseAsync(input);
+
+
+            Console.WriteLine(response);
+        - lang: go
+          source: >-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+              "github.com/swagger-api/swagger-petstore/pkg/purchases"
+            )
+
+
+            config := testsdkconfig.NewConfig()
+
+            client := testsdk.NewTestSdk(config)
+
+
+
+            request := purchases.EditPurchaseRequest{}
+
+            request.SetPurchaseId("PurchaseId")
+
+            request.SetStartDate("StartDate")
+
+            request.SetEndDate("EndDate")
+
+
+            response, err := client.Purchases.EditPurchase(context.Background(),
+            request)
+
+            if err != nil {
+              panic(err)
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Contains information about active session",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SessionInfo"
-                }
-              }
+
+
+            fmt.Print(response)
+  /purchases/{purchaseId}/consumption:
+    get:
+      summary: Get Purchase Consumption
+      description: This endpoint can be called for consumption notifications (e.g.
+        every 1 hour or when the user clicks a button). It returns the data
+        balance (consumption) of purchased packages.
+      operationId: getPurchaseConsumption
+      tags:
+        - Purchases
+      parameters:
+        - in: path
+          required: true
+          name: purchaseId
+          description: ID of the purchase
+          schema:
+            type: string
+            example: 4973fa15-6979-4daa-9cf3-672620df819c
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  dataUsageRemainingInBytes:
+                    type: number
+                    example: 1073741824
+                    description: Remaining balance of the package in bytes
+                  status:
+                    type: string
+                    example: ACTIVE
+                    description: Status of the connectivity, possible values are 'ACTIVE' or
+                      'NOT_ACTIVE'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: >-
+            using TestSdk;
+
+
+            var client = new TestSdkClient();
+
+
+            var response = await
+            client.Purchases.GetPurchaseConsumptionAsync("4973fa15-6979-4daa-9cf3-672620df819c");
+
+
+            Console.WriteLine(response);
+        - lang: go
+          source: >-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+            )
+
+
+            config := testsdkconfig.NewConfig()
+
+            client := testsdk.NewTestSdk(config)
+
+
+            response, err :=
+            client.Purchases.GetPurchaseConsumption(context.Background(),
+            "purchaseId")
+
+            if err != nil {
+              panic(err)
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/Generic401"
-          },
-          "403": {
-            "$ref": "#/components/responses/Generic403"
-          },
-          "404": {
-            "$ref": "#/components/responses/SessionNotFound404"
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInfo"
-                },
-                "example": {
-                  "reasonCode": "ERR-5000",
-                  "systemMessage": "INTERNAL",
-                  "userMessage": "Could not get session information"
-                }
-              }
+
+
+            fmt.Print(response)
+  /esim:
+    get:
+      summary: Get eSIM Status
+      description: Get eSIM Status
+      operationId: getESIM
+      tags:
+        - eSIM
+      parameters:
+        - in: query
+          required: true
+          name: iccid
+          description: ID of the eSIM
+          schema:
+            type: string
+            example: "1111222233334444555"
+            minLength: 18
+            maxLength: 22
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  esim:
+                    type: object
+                    properties:
+                      iccid:
+                        type: string
+                        example: "1111222233334444555"
+                        description: ID of the eSIM
+                        minLength: 18
+                        maxLength: 22
+                      smdpAddress:
+                        type: string
+                        example: CELITECH.IDEMIA.IO
+                        description: SM-DP+ Address
+                      manualActivationCode:
+                        type: string
+                        example: LPA:1$CELITECH.IDEMIA.IO$AAAAA-BBBBB-CCCCC-DDDDD
+                        description: The manual activation code
+                      status:
+                        type: string
+                        example: RELEASED
+                        description: Status of the eSIM, possible values are 'RELEASED', 'DOWNLOADED',
+                          'INSTALLED', 'ENABLED', 'DELETED', or 'ERROR'
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: >-
+            using TestSdk;
+
+
+            var client = new TestSdkClient();
+
+
+            var response = await
+            client.ESim.GetEsimAsync("1111222233334444555");
+
+
+            Console.WriteLine(response);
+        - lang: go
+          source: |-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+              "github.com/swagger-api/swagger-petstore/pkg/esim"
+            )
+
+            config := testsdkconfig.NewConfig()
+            client := testsdk.NewTestSdk(config)
+
+
+            params := esim.GetEsimRequestParams{}
+            params.SetIccid("string")
+
+            response, err := client.ESim.GetEsim(context.Background(), params)
+            if err != nil {
+              panic(err)
             }
-          },
-          "503": {
-            "$ref": "#/components/responses/Generic503"
-          }
-        },
-        "security": [
-          {
-            "oAuth2ClientCredentials": []
-          }
-        ]
-      },
-      "delete": {
-        "x-codeSamples": [
-          {
-            "lang": "Python",
-            "source": "from t_mobile_dev_edge import TMobileDevEdge, Environment\n\nsdk = TMobileDevEdge(\n    client_id=\"\",\n    client_secret=\"\",\n    private_key=\"\",\n    base_url=Environment.DEFAULT.value\n)\n\nresult = sdk.qo_s_sessions.delete_session(\n    session_id=\"mollit qu\",\n    authorization=\"Authorization\",\n    x_authorization=\"X-Authorization\",\n    x_transaction_id=\"X-transaction-id\"\n)"
-          },
-          {
-            "lang": "Go",
-            "source": "\n  import (\n  \"fmt\"\n  \"encoding/json\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedgeconfig\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedge\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/qossessions\"\n)\n\nconfig := tmobiledevedgeconfig.NewConfig()\nclient := tmobiledevedge.NewTMobileDevEdge(config)\n\n\nparams := qossessions.DeleteSessionRequestParams{}\n\n\nresponse, err := client.QoSSessions.DeleteSession(context.Background(), \"sessionId\", params)\nif err != nil {\n  panic(err)\n}\n\nfmt.Print(response)\n  "
-          }
-        ],
-        "tags": [
-          "QoS sessions"
-        ],
-        "summary": "Free resources related to QoS session",
-        "operationId": "deleteSession",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/AccessToken"
-          },
-          {
-            "$ref": "#/components/parameters/PopToken"
-          },
-          {
-            "$ref": "#/components/parameters/TransactionId"
-          },
-          {
-            "name": "sessionId",
-            "in": "path",
-            "description": "Session ID that was obtained from the createSession operation",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/SessionId"
+
+            fmt.Print(response)
+  /esim/{iccid}/device:
+    get:
+      summary: Get eSIM Device
+      description: Get eSIM Device
+      operationId: getESIMDevice
+      tags:
+        - eSIM
+      parameters:
+        - in: path
+          required: true
+          name: iccid
+          description: ID of the eSIM
+          schema:
+            type: string
+            example: "1111222233334444555"
+            minLength: 18
+            maxLength: 22
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  device:
+                    type: object
+                    properties:
+                      oem:
+                        type: string
+                        example: Apple
+                        description: Name of the OEM
+                      hardwareName:
+                        type: string
+                        example: iPhone XR
+                        description: Name of the Device
+                      hardwareModel:
+                        type: string
+                        example: A1920
+                        description: Model of the Device
+                      eid:
+                        type: string
+                        example: "12345678901234567890123456789012"
+                        description: Serial Number of the eSIM
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: >-
+            using TestSdk;
+
+
+            var client = new TestSdkClient();
+
+
+            var response = await
+            client.ESim.GetEsimDeviceAsync("1111222233334444555");
+
+
+            Console.WriteLine(response);
+        - lang: go
+          source: >-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+            )
+
+
+            config := testsdkconfig.NewConfig()
+
+            client := testsdk.NewTestSdk(config)
+
+
+            response, err := client.ESim.GetEsimDevice(context.Background(),
+            "iccid")
+
+            if err != nil {
+              panic(err)
             }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Session deleted"
-          },
-          "401": {
-            "$ref": "#/components/responses/Generic401"
-          },
-          "403": {
-            "$ref": "#/components/responses/Generic403"
-          },
-          "404": {
-            "$ref": "#/components/responses/SessionNotFound404"
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInfo"
-                },
-                "example": {
-                  "reasonCode": "ERR-5000",
-                  "systemMessage": "INTERNAL",
-                  "userMessage": "Session could not be deleted"
-                }
-              }
+
+
+            fmt.Print(response)
+  /esim/{iccid}/history:
+    get:
+      summary: Get eSIM History
+      description: Get eSIM History
+      operationId: getESIMHistory
+      tags:
+        - eSIM
+      parameters:
+        - in: path
+          required: true
+          name: iccid
+          description: ID of the eSIM
+          schema:
+            type: string
+            example: "1111222233334444555"
+            minLength: 18
+            maxLength: 22
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  esim:
+                    type: object
+                    properties:
+                      iccid:
+                        type: string
+                        example: "1111222233334444555"
+                        description: ID of the eSIM
+                        minLength: 18
+                        maxLength: 22
+                      history:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            status:
+                              type: string
+                              example: INSTALLED
+                              description: The status of the eSIM at a given time, possible values are
+                                'RELEASED', 'DOWNLOADED', 'INSTALLED',
+                                'ENABLED', 'DELETED', or 'ERROR'
+                            statusDate:
+                              type: string
+                              format: date-time
+                              example: 2023-10-20T00:00:00+00:00
+                              description: The date when the eSIM status changed in the format
+                                'yyyy-MM-ddThh:mm:ssZZ'
+                            date:
+                              deprecated: true
+                              type: number
+                              description: Epoch value representing the date when the eSIM status changed
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: >-
+            using TestSdk;
+
+
+            var client = new TestSdkClient();
+
+
+            var response = await
+            client.ESim.GetEsimHistoryAsync("1111222233334444555");
+
+
+            Console.WriteLine(response);
+        - lang: go
+          source: >-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+            )
+
+
+            config := testsdkconfig.NewConfig()
+
+            client := testsdk.NewTestSdk(config)
+
+
+            response, err := client.ESim.GetEsimHistory(context.Background(),
+            "iccid")
+
+            if err != nil {
+              panic(err)
             }
-          },
-          "503": {
-            "$ref": "#/components/responses/Generic503"
-          }
-        },
-        "security": [
-          {
-            "oAuth2ClientCredentials": []
-          }
-        ]
-      }
-    },
-    "/notifications": {
-      "post": {
-        "x-codeSamples": [
-          {
-            "lang": "Python",
-            "source": "from t_mobile_dev_edge import TMobileDevEdge, Environment\nfrom t_mobile_dev_edge.models import Notification\n\nsdk = TMobileDevEdge(\n    client_id=\"\",\n    client_secret=\"\",\n    private_key=\"\",\n    base_url=Environment.DEFAULT.value\n)\n\nrequest_body = Notification(\n    session_id=\"in dolor molli\",\n    event=\"SESSION_TERMINATED\"\n)\n\nresult = sdk.session_notifications_callback.post_notification(\n    request_body=request_body,\n    authorization=\"Authorization\",\n    x_authorization=\"X-Authorization\",\n    x_transaction_id=\"X-transaction-id\"\n)"
-          },
-          {
-            "lang": "Go",
-            "source": "\n  import (\n  \"fmt\"\n  \"encoding/json\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedgeconfig\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/tmobiledevedge\"\n  \"github.com/liblaber/tmobile-combined-go-sdk/pkg/sessionnotificationscallback\"\n)\n\nconfig := tmobiledevedgeconfig.NewConfig()\nclient := tmobiledevedge.NewTMobileDevEdge(config)\n\n\nparams := sessionnotificationscallback.PostNotificationRequestParams{}\n\n\nsessionEvent := sessionnotificationscallback.SESSION_EVENT_SESSION_TERMINATED\n\nrequest := sessionnotificationscallback.Notification{}\nrequest.SetSessionId(\"SessionId\")\nrequest.SetEvent(sessionEvent)\n\nresponse, err := client.SessionNotificationsCallback.PostNotification(context.Background(), request, params)\nif err != nil {\n  panic(err)\n}\n\nfmt.Print(response)\n  "
-          }
-        ],
-        "tags": [
-          "Session notifications callback"
-        ],
-        "summary": "Session notifications callback",
-        "description": "Important: this endpoint is to be implemented by the API consumer.\nThe QoD server will call this endpoint whenever any network related event occurs.\nCurrently only SESSION_TERMINATED event is implemented. Any other network events are ignored.\n",
-        "operationId": "postNotification",
-        "parameters": [
-          {
-            "$ref": "#/components/parameters/AccessToken"
-          },
-          {
-            "$ref": "#/components/parameters/PopToken"
-          },
-          {
-            "$ref": "#/components/parameters/TransactionId"
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Notification"
-              }
+
+
+            fmt.Print(response)
+  /esim/{iccid}/mac:
+    get:
+      summary: Get eSIM MAC
+      description: Get eSIM MAC
+      operationId: getESIMMac
+      tags:
+        - eSIM
+      parameters:
+        - in: path
+          required: true
+          name: iccid
+          description: ID of the eSIM
+          schema:
+            type: string
+            example: "1111222233334444555"
+            minLength: 18
+            maxLength: 22
+      responses:
+        "200":
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  esim:
+                    type: object
+                    properties:
+                      iccid:
+                        type: string
+                        example: "1111222233334444555"
+                        description: ID of the eSIM
+                        minLength: 18
+                        maxLength: 22
+                      smdpAddress:
+                        type: string
+                        example: CELITECH.IDEMIA.IO
+                        description: SM-DP+ Address
+                      manualActivationCode:
+                        type: string
+                        example: LPA:1$CELITECH.IDEMIA.IO$AAAAA-BBBBB-CCCCC-DDDDD
+                        description: The manual activation code
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: this is an example error message
+                    description: Message of the error
+      x-codeSamples:
+        - lang: csharp
+          source: >-
+            using TestSdk;
+
+
+            var client = new TestSdkClient();
+
+
+            var response = await
+            client.ESim.GetEsimMacAsync("1111222233334444555");
+
+
+            Console.WriteLine(response);
+        - lang: go
+          source: >-
+            import (
+              "fmt"
+              "encoding/json"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdkconfig"
+              "github.com/swagger-api/swagger-petstore/pkg/testsdk"
+            )
+
+
+            config := testsdkconfig.NewConfig()
+
+            client := testsdk.NewTestSdk(config)
+
+
+            response, err := client.ESim.GetEsimMac(context.Background(),
+            "iccid")
+
+            if err != nil {
+              panic(err)
             }
-          }
-        },
-        "responses": {
-          "204": {
-            "description": "Successful notification"
-          },
-          "400": {
-            "$ref": "#/components/responses/Generic400"
-          },
-          "401": {
-            "$ref": "#/components/responses/Generic401"
-          },
-          "403": {
-            "$ref": "#/components/responses/Generic403"
-          },
-          "500": {
-            "description": "Server error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorInfo"
-                },
-                "example": {
-                  "reasonCode": "ERR-5000",
-                  "systemMessage": "INTERNAL",
-                  "userMessage": "Failed to handle notification"
-                }
-              }
-            }
-          },
-          "503": {
-            "$ref": "#/components/responses/Generic503"
-          }
-        },
-        "security": [
-          {
-            "apiKey": []
-          }
-        ]
-      }
-    }
-  },
-  "components": {
-    "parameters": {
-      "TransactionId": {
-        "name": "X-transaction-id",
-        "in": "header",
-        "description": "The transaction ID. Represents the API transaction, for use in debugging.",
-        "required": false,
-        "schema": {
-          "type": "string"
-        }
-      },
-      "AccessToken": {
-        "name": "Authorization",
-        "in": "header",
-        "description": "Your [access token](/documentation-hub/api-security/authentication-coding-apis#request-id-and-access-tokens).",
-        "required": false,
-        "schema": {
-          "type": "string"
-        },
-        "example": "eyJraWQiOiJmYjk3ZGQxZi0xMDUzLTRiZGEtYjQ2OC1lZjU3ODdmZTA1MTMiLCJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJ0bW9uLWpyNElVT25jeU9lTWRZdIiwiYXVkIjoidG1vbi1qcjRJVU9uY3lPZU1kWXdDSzFyUUd1V0RWWlpvUEFwVCIsImlzcyI6Imh0dHBzOlwvXC9hcGlzLnQtbW9iaWxlLmNvbVwvb2F1dGgyXC92MSIsImV4cCI6MTY3OTM1OTAwNCwiaWF0IjoxNjc5MzU1NDA0LemdgdhdspEeeSMNDW0.2emmeePL0239memmemIifQ.csRgOWOgRjwlY_K35hSd22SNqTS_wnSPLpXNcnh2uDxi3_wMaGmpEdv4g_EYnrfBkgbZrLam6o9dTfTmxXmx9kaSs2gAfQjq_lmTsTwMQppnCbqZ8YmRAtu9dj3mLlNKYg8aBEJnk6NxdDf5Z980k2xfUFeyNlhkrhwt3HToEPTIbspnzNgh3GEEdbwvWY8CD7gplIVHsDyWgz8cnzfL98oAuGsQLP3qnTN8oiOYJYUWdNLUxXyxgzDKpVli6WMK631phGbi2dXziY7Qz0YRQPf2fD9Da2jjNKEmfx3v9OqN2WO3YC261cJuWyd41drh2L5HiHLUxois3fHXyfNOA"
-      },
-      "PopToken": {
-        "name": "X-Authorization",
-        "in": "header",
-        "description": "Your [PoP Token](/documentation-hub/api-security/authentication-coding-apis#create-a-pop-token).",
-        "required": false,
-        "schema": {
-          "type": "string"
-        },
-        "example": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlZHRzIjoiUp6MTl4OFo4TEJMYTBPS3pZWVRNSnpKMldKNE5YNGppoiuyrtdfswdACHFBNJHG,..JBB,JJFDWQFtVnI4OCIsInYiOiIxIiwiZXhwIjoxNjc5MzU1NTM1LCJlaHRzIjoiQ29udGVudC1UeXBlO0F1dGhvcml6YXRpb247dXJpO2h0dHAtbWV0aG9kO2JvZHkiLCJpYXQiOjE2NzkzNTU0M228ccccbgjvjrehdhYzAtZDVkMC1hNGZiLThlMTkuSUJq3IDCMG6dOPPiFQao288sjndh_5IBWHk3mD_iZZatz7B_S_qC6kfsuoBoQC0TckwTTb7kB51HJ-Z2GXpGjweDwT_oVf0w0IyvQg4b61TBU29GeTOu21UdG0hemUHfJEiiCIZNeeb9GoSifxKuuwKdeSiXAU1OqKnjcB3mbYQVsgivC7wduLUt5B70w9x5cx002xFNa_C2EMWZGhOUJafsN8UhNDdjBWQOrjEK5g9br4bBBowQQMnPIRI5JC4PiPwTCFHbki4MSZlKSjoCqZhjlnOdNcLU765iLdE_jbSazqP34glN1RTw"
-      }
-    },
-    "schemas": {
-      "Error": {
-        "description": "An error response",
-        "type": "object",
-        "properties": {
-          "reasonCode": {
-            "type": "string",
-            "example": "ERR-1031",
-            "description": "The error code"
-          },
-          "systemMessage": {
-            "type": "string",
-            "example": "Internal Server Error",
-            "description": "The error message"
-          },
-          "userMessage": {
-            "type": "string",
-            "example": "Trying to parse input that is malformed or otherwise invalid",
-            "description": "The error message"
-          },
-          "subReason": {
-            "$ref": "#/components/schemas/Error"
-          }
-        }
-      },
-      "DeviceDetails": {
-        "description": "Device details",
-        "type": "object",
-        "properties": {
-          "iccid": {
-            "type": "string",
-            "example": "8901882024109918312",
-            "description": "The SIM card's ICCID."
-          },
-          "imsi": {
-            "type": "string",
-            "example": "311882020991831",
-            "description": "The SIM card's IMSI."
-          },
-          "msisdn": {
-            "type": "string",
-            "example": "17197158760",
-            "description": "The SIM card's MSSIDN."
-          },
-          "imei": {
-            "type": "string",
-            "example": "3515211023735600",
-            "description": "The device's IMEI."
-          },
-          "status": {
-            "type": "string",
-            "example": "ACTIVATED",
-            "description": "The device's SIM status."
-          },
-          "ratePlan": {
-            "type": "string",
-            "example": "EDGE Plan1 - CATM 500MB",
-            "description": "The connectivity rate plan."
-          },
-          "communicationPlan": {
-            "type": "string",
-            "example": "TMUS_DEVE_CATM_CCNA_DATA_SMS",
-            "description": "The device's communication plan. This is an indicator of network configuration."
-          },
-          "customer": {
-            "type": "string",
-            "example": "1ff1bf2a9ee941ba9f7ac23c53f7b7d0",
-            "description": "The customer associated with this device, if any. (Generally an enterprise or business unit.)"
-          },
-          "endConsumerId": {
-            "type": "string",
-            "nullable": true,
-            "example": null,
-            "description": "The ID of the person, if any, associated with this device."
-          },
-          "dateActivated": {
-            "type": "string",
-            "example": "2022-09-27 19:47:00.481+0000",
-            "description": "The date when the device was first activated."
-          },
-          "dateAdded": {
-            "type": "string",
-            "example": "2022-08-30 22:58:35.687+0000",
-            "description": "The date when the device was first added."
-          },
-          "dateUpdated": {
-            "type": "string",
-            "example": "2022-09-27 19:47:00.504+0000",
-            "description": "The date when the last device information update occurred."
-          },
-          "dateShipped": {
-            "type": "string",
-            "example": "2022-08-30 07:00:00.000+0000",
-            "description": "The date when the device SIM was transferred from the service provider inventory into the account."
-          },
-          "accountId": {
-            "type": "string",
-            "example": "500573440",
-            "description": "The account ID associated with the device."
-          },
-          "fixedIPAddress": {
-            "type": "string",
-            "nullable": true,
-            "example": null,
-            "description": "The IPv4 address assigned to the device. This field may be null if the device communication plan uses dynamic IP addresses or if the device uses an IPv6 address instead."
-          },
-          "fixedIpv6Address": {
-            "type": "string",
-            "nullable": true,
-            "example": null,
-            "description": "TThe IPv6 address assigned to the device. This field may be null if the device communication plan uses dynamic IP addresses or if the device uses an IPv4 address instead."
-          },
-          "operatorCustom1": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the service provider has created in Control Center. This information is applicable to users with service provider roles only."
-          },
-          "operatorCustom2": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the service provider has created in Control Center. This information is applicable to users with service provider roles only."
-          },
-          "operatorCustom3": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the service provider has created in Control Center. This information is applicable to users with service provider roles only."
-          },
-          "operatorCustom4": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the service provider has created in Control Center. This information is applicable to users with service provider roles only."
-          },
-          "operatorCustom5": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the service provider has created in Control Center. This information is applicable to users with service provider roles only."
-          },
-          "accountCustom1": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the enterprise has created in Control Center. This information is applicable to users with account roles only."
-          },
-          "accountCustom2": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the enterprise has created in Control Center. This information is applicable to users with account roles only."
-          },
-          "accountCustom3": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the enterprise has created in Control Center. This information is applicable to users with account roles only."
-          },
-          "accountCustom4": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the enterprise has created in Control Center. This information is applicable to users with account roles only."
-          },
-          "accountCustom5": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the enterprise has created in Control Center. This information is applicable to users with account roles only."
-          },
-          "accountCustom6": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the enterprise has created in Control Center. This information is applicable to users with account roles only."
-          },
-          "accountCustom7": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the enterprise has created in Control Center. This information is applicable to users with account roles only."
-          },
-          "accountCustom8": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the enterprise has created in Control Center. This information is applicable to users with account roles only."
-          },
-          "accountCustom9": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the enterprise has created in Control Center. This information is applicable to users with account roles only."
-          },
-          "accountCustom10": {
-            "type": "string",
-            "example": "CCIOTEMBISIMS",
-            "description": "Values for any custom device fields the enterprise has created in Control Center. This information is applicable to users with account roles only."
-          },
-          "customerCustom1": {
-            "type": "string",
-            "example": "DevEdge",
-            "description": "Values for any custom device fields the customer has created in Control Center. This information is applicable to users with customer roles only."
-          },
-          "customerCustom2": {
-            "type": "string",
-            "example": "DevEdge",
-            "description": "Values for any custom device fields the customer has created in Control Center. This information is applicable to users with customer roles only."
-          },
-          "customerCustom3": {
-            "type": "string",
-            "example": "DevEdge",
-            "description": "Values for any custom device fields the customer has created in Control Center. This information is applicable to users with customer roles only."
-          },
-          "customerCustom4": {
-            "type": "string",
-            "example": "DevEdge",
-            "description": "Values for any custom device fields the customer has created in Control Center. This information is applicable to users with customer roles only."
-          },
-          "customerCustom5": {
-            "type": "string",
-            "example": "DevEdge",
-            "description": "Values for any custom device fields the customer has created in Control Center. This information is applicable to users with customer roles only."
-          },
-          "simNotes": {
-            "type": "string",
-            "description": "Information the service provider has added about the device."
-          },
-          "euiccid": {
-            "type": "string",
-            "description": "EU ICCID"
-          },
-          "deviceID": {
-            "type": "string",
-            "description": "Optional identifier that an account or customer can give to a device."
-          },
-          "modemID": {
-            "type": "string",
-            "description": "The modem used by the device to transmit data."
-          },
-          "globalSimType": {
-            "type": "string",
-            "description": "Indicates whether the device is using a primary SIM from the lead service provider or a virtual subscription from a partner service provider."
-          },
-          "mec": {
-            "type": "string"
-          }
-        }
-      },
-      "Iccid": {
-        "description": "The SIM card's ICCID.",
-        "type": "string",
-        "example": "8901882024109918312"
-      },
-      "DeviceLocation": {
-        "description": "The details of the device location",
-        "type": "object",
-        "properties": {
-          "iccid": {
-            "$ref": "#/components/schemas/Iccid"
-          },
-          "msisdn": {
-            "type": "string",
-            "example": "17197158760"
-          },
-          "distanceUnit": {
-            "type": "string",
-            "enum": [
-              "meter"
-            ],
-            "example": "meter",
-            "description": "The unit of distance."
-          },
-          "longitude": {
-            "type": "number",
-            "example": -104.866133,
-            "description": "The longitude of the device.",
-            "minimum": -180,
-            "maximum": 180
-          },
-          "latitude": {
-            "type": "number",
-            "example": 39.122819,
-            "description": "The latitude of the device.",
-            "minimum": -90,
-            "maximum": 90
-          },
-          "shape": {
-            "type": "string",
-            "enum": [
-              "CircularArea"
-            ],
-            "example": "CircularArea",
-            "description": "The shape of the area."
-          },
-          "radius": {
-            "type": "number",
-            "example": 468,
-            "description": "The radius of the area.",
-            "minimum": 0
-          },
-          "cellid": {
-            "type": "string",
-            "example": "6490371",
-            "description": "The cell ID of the device."
-          },
-          "timestamp": {
-            "type": "string",
-            "example": "20220324202805",
-            "description": "The timestamp of the location."
-          }
-        }
-      },
-      "DeviceLocationRequest": {
-        "description": "The details of the device location request",
-        "type": "object",
-        "properties": {
-          "iccid": {
-            "$ref": "#/components/schemas/Iccid"
-          },
-          "horizontalPrecision": {
-            "type": "string",
-            "enum": [
-              "AREA"
-            ],
-            "example": "AREA",
-            "description": "The horizontal precision of the location."
-          },
-          "respTimeOut": {
-            "type": "integer",
-            "example": 30,
-            "description": "The response timeout in seconds.",
-            "minimum": 0,
-            "maximum": 50
-          },
-          "maxCacheAge": {
-            "type": "integer",
-            "example": 300,
-            "description": "The maximum cache age, in seconds.\n\nBy comparing the cache with maxCacheAge you can tell whether the information was retrieved from the server or from the cache:\n\ncache > maxCacheAge: Information is sent from the server\ncache < maxCacheAge: Information is sent from the cache\n",
-            "minimum": 0,
-            "maximum": 900
-          }
-        }
-      },
-      "SessionId": {
-        "type": "string",
-        "format": "uuid",
-        "description": "Session ID in UUID format"
-      },
-      "SessionInfo": {
-        "description": "Session related information.",
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/CreateSession"
-          },
-          {
-            "type": "object",
-            "required": [
-              "id",
-              "duration",
-              "startedAt",
-              "expiresAt"
-            ],
-            "properties": {
-              "id": {
-                "$ref": "#/components/schemas/SessionId"
-              },
-              "startedAt": {
-                "type": "integer",
-                "example": 1639479600,
-                "description": "Timestamp of session start in seconds since unix epoch",
-                "format": "int64"
-              },
-              "expiresAt": {
-                "type": "integer",
-                "example": 1639566000,
-                "description": "Timestamp of session expiration if the session was not deleted, in seconds since unix epoch",
-                "format": "int64"
-              },
-              "messages": {
-                "type": "array",
-                "items": {
-                  "$ref": "#/components/schemas/Message"
-                }
-              }
-            }
-          }
-        ]
-      },
-      "CreateSession": {
-        "description": "Data type with attributes required for creating a session",
-        "type": "object",
-        "properties": {
-          "duration": {
-            "type": "integer",
-            "example": 86400,
-            "description": "Session duration in seconds. Maximal value of 24 hours is used if not set.\nAfter session has expired the client will receive SESSION_TERMINATED event. See notification callback.\n",
-            "format": "int32",
-            "minimum": 1,
-            "maximum": 86400,
-            "default": 86400
-          },
-          "ueId": {
-            "$ref": "#/components/schemas/UeId"
-          },
-          "asId": {
-            "$ref": "#/components/schemas/AsId"
-          },
-          "uePorts": {
-            "$ref": "#/components/schemas/PortsSpec"
-          },
-          "asPorts": {
-            "$ref": "#/components/schemas/PortsSpec"
-          },
-          "qos": {
-            "$ref": "#/components/schemas/QosProfile"
-          },
-          "notificationUrl": {
-            "type": "string",
-            "format": "uri",
-            "example": "https://application-server.com",
-            "description": "Allows asynchronous delivery of session related events"
-          },
-          "notificationAuthToken": {
-            "type": "string",
-            "example": "c8974e592c2fa383d4a3960714",
-            "description": "Authentication token for callback API"
-          }
-        },
-        "required": [
-          "ueId",
-          "asId",
-          "qos"
-        ]
-      },
-      "Port": {
-        "type": "integer",
-        "minimum": 0,
-        "maximum": 65535
-      },
-      "PortsSpec": {
-        "type": "object",
-        "minProperties": 1,
-        "properties": {
-          "ranges": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "type": "object",
-              "required": [
-                "from",
-                "to"
-              ],
-              "properties": {
-                "from": {
-                  "$ref": "#/components/schemas/Port"
-                },
-                "to": {
-                  "$ref": "#/components/schemas/Port"
-                }
-              }
-            }
-          },
-          "ports": {
-            "type": "array",
-            "minItems": 1,
-            "items": {
-              "$ref": "#/components/schemas/Port"
-            }
-          }
-        },
-        "example": {
-          "ranges": [
-            {
-              "from": 5010,
-              "to": 5020
-            }
-          ],
-          "ports": [
-            5060,
-            5070
-          ]
-        },
-        "description": "Ports may be specified as a list of ranges or single ports.\n"
-      },
-      "QosProfile": {
-        "type": "string",
-        "enum": [
-          "QOS_E",
-          "QOS_S",
-          "QOS_M",
-          "QOS_L"
-        ],
-        "description": "* `QOS_E` - Qualifier for enhanced communication profile\n* `QOS_S` - Qualifier for the requested QoS profile _S_\n* `QOS_M` - Qualifier for the requested QoS profile _M_\n* `QOS_L` - Qualifier for the requested QoS profile _L_\n"
-      },
-      "Notification": {
-        "type": "object",
-        "required": [
-          "sessionId",
-          "event"
-        ],
-        "properties": {
-          "sessionId": {
-            "$ref": "#/components/schemas/SessionId"
-          },
-          "event": {
-            "$ref": "#/components/schemas/SessionEvent"
-          }
-        }
-      },
-      "SessionEvent": {
-        "type": "string",
-        "enum": [
-          "SESSION_TERMINATED"
-        ]
-      },
-      "ErrorInfo": {
-        "type": "object",
-        "required": [
-          "code",
-          "message"
-        ],
-        "properties": {
-          "code": {
-            "type": "string",
-            "description": "Code given to this error"
-          },
-          "message": {
-            "type": "string",
-            "description": "Detailed error description"
-          }
-        }
-      },
-      "UeId": {
-        "type": "object",
-        "minProperties": 1,
-        "properties": {
-          "externalId": {
-            "$ref": "#/components/schemas/ExternalId"
-          },
-          "msisdn": {
-            "$ref": "#/components/schemas/MSISDN"
-          },
-          "ipv4addr": {
-            "$ref": "#/components/schemas/Ipv4Addr"
-          },
-          "ipv6addr": {
-            "$ref": "#/components/schemas/Ipv6Addr"
-          }
-        },
-        "description": "User equipment identifier"
-      },
-      "AsId": {
-        "type": "object",
-        "minProperties": 1,
-        "properties": {
-          "ipv4addr": {
-            "$ref": "#/components/schemas/Ipv4Addr"
-          },
-          "ipv6addr": {
-            "$ref": "#/components/schemas/Ipv6Addr"
-          }
-        },
-        "description": "Application server identifier"
-      },
-      "ExternalId": {
-        "type": "string",
-        "example": "123456789@domain.com"
-      },
-      "MSISDN": {
-        "type": "string",
-        "pattern": "^\\+?[0-9]{5,15}$",
-        "example": "123456789",
-        "description": "Subscriber number in E.164 format (starting with country code). Optionally prefixed with '+'."
-      },
-      "Ipv4Addr": {
-        "type": "string",
-        "format": "ipv4",
-        "pattern": "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])(?:\\.(?:[01]?\\d\\d?|2[0-4]\\d|25[0-5])){3}(\\/([0-9]|[1-2][0-9]|3[0-2]))?$",
-        "example": "192.168.0.1/24",
-        "description": "IPv4 address may be specified in form <address/mask> as:\n  - address - an IPv4 number in dotted-quad form 1.2.3.4. Only this exact IP number will match the flow control rule.\n  - address/mask - an IP number as above with a mask width of the form 1.2.3.4/24.\n    In this case, all IP numbers from 1.2.3.0 to 1.2.3.255 will match. The bit width MUST be valid for the IP version.\n"
-      },
-      "Ipv6Addr": {
-        "type": "string",
-        "format": "ipv6",
-        "pattern": "^((:|(0?|([1-9a-f][0-9a-f]{0,3}))):)((0?|([1-9a-f][0-9a-f]{0,3})):){0,6}(:|(0?|([1-9a-f][0-9a-f]{0,3})))(\\/(([0-9])|([0-9]{2})|(1[0-1][0-9])|(12[0-8])))?$",
-        "example": "2001:db8:85a3:8d3:1319:8a2e:370:7344",
-        "description": "IPv6 address, following IETF 5952 format, may be specified in form <address/mask> as:\n  - address - The /128 subnet is optional for single addresses:\n    - 2001:db8:85a3:8d3:1319:8a2e:370:7344\n    - 2001:db8:85a3:8d3:1319:8a2e:370:7344/128\n  - address/mask - an IP v6 number with a mask:\n    - 2001:db8:85a3:8d3::0/64\n    - 2001:db8:85a3:8d3::/64\n"
-      },
-      "Message": {
-        "type": "object",
-        "properties": {
-          "severity": {
-            "type": "string",
-            "enum": [
-              "INFO",
-              "WARNING"
-            ],
-            "description": "Message severity"
-          },
-          "description": {
-            "type": "string",
-            "description": "Detailed message text"
-          }
-        },
-        "required": [
-          "severity",
-          "description"
-        ]
-      }
-    },
-    "responses": {
-      "DeviceDetailsResponse": {
-        "description": "Contains information about device connectivity",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/DeviceDetails"
-            }
-          }
-        }
-      },
-      "GenericError": {
-        "description": "Invalid input",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/Error"
-            }
-          }
-        }
-      },
-      "DeviceLocationResponse": {
-        "description": "Device location details",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/DeviceLocation"
-            }
-          }
-        }
-      },
-      "Generic400": {
-        "description": "Invalid input",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorInfo"
-            },
-            "example": {
-              "reasonCode": "ERR-4000",
-              "systemMessage": "INVALID_INPUT",
-              "userMessage": "Schema validation failed at  ..."
-            }
-          }
-        }
-      },
-      "Generic401": {
-        "description": "Unauthorized",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorInfo"
-            },
-            "example": {
-              "reasonCode": "ERR-1091",
-              "systemMessage": "UNAUTHORIZED",
-              "userMessage": "Authorization failed: ..."
-            }
-          }
-        }
-      },
-      "Generic403": {
-        "description": "Forbidden",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorInfo"
-            },
-            "example": {
-              "reasonCode": "ERR-1043",
-              "systemMessage": "FORBIDDEN",
-              "userMessage": "Operation not allowed: ..."
-            }
-          }
-        }
-      },
-      "SessionNotFound404": {
-        "description": "Session not found",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorInfo"
-            },
-            "example": {
-              "reasonCode": "ERR-1004",
-              "systemMessage": "NOT_FOUND",
-              "userMessage": "Session Id does not exist"
-            }
-          }
-        }
-      },
-      "Generic503": {
-        "description": "Service unavailable",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ErrorInfo"
-            },
-            "example": {
-              "reasonCode": "ERR-5003",
-              "systemMessage": "SERVICE_UNAVAILABLE",
-              "userMessage": "Service unavailable"
-            }
-          }
-        }
-      }
-    },
-    "requestBodies": {
-      "DeviceLocationRequest": {
-        "description": "The details of the device location request",
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/DeviceLocationRequest"
-            }
-          }
-        }
-      }
-    },
-    "securitySchemes": {
-      "oAuth2ClientCredentials": {
-        "type": "oauth2",
-        "description": "This API uses OAuth 2 with the client credentials grant flow.",
-        "flows": {
-          "clientCredentials": {
-            "tokenUrl": "{tokenUrl}",
-            "scopes": {}
-          }
-        }
-      },
-      "apiKey": {
-        "type": "apiKey",
-        "description": "API key to authorize requests",
-        "name": "apikey",
-        "in": "query"
-      }
-    }
-  }
-}
+
+
+            fmt.Print(response)
+tags:
+  - name: Destinations
+    description: Destinations encapsulate the various countries & regions that
+      CELITECH currently supports.
+  - name: eSIM
+    description: The eSIM endpoints encompass a wide range of functionalities
+      related to the partner's owned eSIMs. This includes obtaining detailed
+      information about eSIM devices, eSIM history, determining the current eSIM
+      status, retrieving activation codes, and exploring various other
+      attributes and actions associated with eSIM management.
+  - name: Packages
+    description: The Packages endpoint focuses on the data packages offered by CELITECH.
+  - name: Purchases
+    description: The Purchases endpoints offer extensive capabilities for managing
+      eSIM purchases. Partners can utilize these endpoints to acquire new eSIMs,
+      top-up an existing eSIM, list all existing purchases, update the
+      activation period for future purchases, monitor the consumption and status
+      of current purchases, and access other functionalities to support
+      different purchasing workflows and requirements.
+x-tagGroups:
+  - name: API Endpoints
+    tags:
+      - Destinations
+      - Packages
+      - Purchases
+      - eSIM
