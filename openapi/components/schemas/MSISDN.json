@@ -1,6 +1,0 @@
-{
-  "type": "string",
-  "pattern": "^\\+?[0-9]{5,15}$",
-  "example": "123456789",
-  "description": "Subscriber number in E.164 format (starting with country code). Optionally prefixed with '+'."
-}
