@@ -1,7 +1,7 @@
 # See https://redocly.com/docs/cli/configuration/ for more information.
 apis:
   test-celitec-yaml:
-    root: openapi/openapi.json
+    root: openapi/openapi.yaml
 extends:
   - recommended
 rules:
